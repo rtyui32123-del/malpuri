@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="말풀이">
+<meta name="theme-color" content="#fffaf4">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>말풀이 — PlainTalk</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#fffaf4; --bg2:#fff4e8; --bg3:#ffe8cc; --bg4:#fdf6ef;
+  --accent:#f07d3a; --accent2:#f5a06a; --accentl:#fff0e4;
+  --tx:#2d1a0e; --tx2:#7a5c45; --tx3:#b8977e;
+  --border:rgba(200,140,90,0.15); --border2:rgba(200,140,90,0.28);
+  --success:#3aab6f; --rd:#e05050; --blue:#3a7fd5;
+  --shadow:0 2px 16px rgba(240,125,58,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 20%,rgba(240,125,58,0.07) 0%,transparent 55%),radial-gradient(circle at 82% 78%,rgba(245,160,106,0.07) 0%,transparent 50%);pointer-events:none;z-index:0}
+
+/* STATUS */
+.status{height:44px;background:transparent;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;position:relative;z-index:1}
+.status-time{font-size:15px;font-weight:700;color:var(--tx2)}
+.status-icons{display:flex;gap:5px;align-items:center}
+.status-icons svg{width:15px;height:15px;fill:none;stroke:var(--tx2);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* HEADER */
+.header{padding:2px 20px 12px;flex-shrink:0;position:relative;z-index:1}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:11px}
+.logo-mark{width:42px;height:42px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(240,125,58,0.35);font-size:22px;line-height:1}
+.logo-text{font-size:22px;font-weight:700;letter-spacing:-0.5px;color:var(--tx)}
+.logo-sub{font-size:11px;color:var(--tx3);margin-top:1px}
+.hdr-btns{display:flex;gap:8px}
+.icon-btn{width:38px;height:38px;background:white;border:1px solid var(--border2);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
+.icon-btn svg{width:18px;height:18px;stroke:var(--tx2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* TABS */
+.tabs{display:flex;padding:0 20px;gap:4px;border-bottom:1.5px solid var(--border);flex-shrink:0;background:transparent;position:relative;z-index:1}
+.tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--tx3);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* BODY */
+.scroll-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.scroll-body::-webkit-scrollbar{display:none}
+.view{display:none;flex-direction:column;gap:14px}
+.view.on{display:flex}
+
+/* PRIVACY NOTICE */
+.privacy-notice{background:#f0f7ff;border:1px solid rgba(58,127,213,0.25);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.privacy-notice svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.8;stroke-linecap:round;flex-shrink:0;margin-top:1px}
+.privacy-text{font-size:12px;color:#2d5a9e;line-height:1.6}
+.privacy-text strong{font-weight:700}
+
+/* SECTION LABEL */
+.slbl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+
+/* INPUT */
+.input-wrap{position:relative}
+.input-area{width:100%;min-height:110px;background:white;border:1.5px solid var(--border2);border-radius:16px;padding:14px 16px 30px;font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--tx);resize:none;outline:none;line-height:1.8;transition:border-color .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(200,140,90,0.07)}
+.input-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(240,125,58,0.12)}
+.input-area::placeholder{color:var(--tx3)}
+.input-footer{position:absolute;bottom:10px;left:14px;right:14px;display:flex;align-items:center;justify-content:space-between}
+.char-count{font-size:11px;color:var(--tx3)}
+.clear-btn{font-size:11px;color:var(--tx3);cursor:pointer;padding:2px 6px;border-radius:6px;background:var(--bg2);border:none;font-family:'Noto Sans KR',sans-serif}
+.clear-btn:hover{color:var(--rd)}
+
+/* PHOTO */
+.photo-btn{width:100%;padding:14px;background:white;border:1.5px dashed var(--border2);border-radius:16px;color:var(--tx2);font-size:13px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.photo-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accentl)}
+.photo-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round}
+.photo-preview{display:none;position:relative;border-radius:16px;overflow:hidden;border:1.5px solid var(--border2)}
+.photo-preview img{width:100%;display:block;max-height:180px;object-fit:cover}
+.photo-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;background:rgba(0,0,0,0.45);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:white;font-size:14px}
+#file-input{display:none}
+.pii-warn{display:none;background:#fff8e6;border:1px solid rgba(240,180,50,0.35);border-radius:10px;padding:8px 12px;font-size:12px;color:#8a6200;line-height:1.6;margin-top:6px}
+.pii-warn.show{display:block}
+
+/* LEVEL */
+.level-row{display:flex;gap:8px}
+.lchip{flex:1;padding:10px 6px;text-align:center;background:white;border:1.5px solid var(--border2);border-radius:14px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;box-shadow:0 1px 4px rgba(200,140,90,0.07)}
+.lchip.on{background:var(--accentl);border-color:var(--accent);color:var(--accent);box-shadow:0 2px 10px rgba(240,125,58,0.15)}
+.lchip-emoji{font-size:18px;display:block;margin-bottom:4px}
+
+/* MODE TOGGLE */
+.mode-row{display:flex;background:white;border:1.5px solid var(--border2);border-radius:14px;padding:4px;gap:4px;box-shadow:0 1px 4px rgba(200,140,90,0.07)}
+.mchip{flex:1;padding:8px 6px;text-align:center;background:transparent;border:none;border-radius:10px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif}
+.mchip.on{background:var(--accent);color:white;box-shadow:0 2px 8px rgba(240,125,58,0.3)}
+
+/* MAIN BTN */
+.main-btn{width:100%;padding:16px;background:var(--accent);border:none;border-radius:16px;font-size:16px;font-weight:700;color:white;font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(240,125,58,0.35);letter-spacing:-.3px}
+.main-btn:active{transform:scale(.98)}
+.main-btn:disabled{opacity:.55;cursor:not-allowed}
+.main-btn.loading{background:var(--bg3);color:var(--tx2);box-shadow:none}
+.dots{display:inline-flex;gap:4px;align-items:center}
+.dot{width:7px;height:7px;background:var(--accent2);border-radius:50%;animation:bounce 1s infinite}
+.dot:nth-child(2){animation-delay:.15s}
+.dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:scale(.75);opacity:.45}40%{transform:scale(1.15);opacity:1}}
+
+/* RESULT */
+.result-card{background:white;border:1.5px solid var(--border2);border-radius:18px;overflow:hidden;animation:slideup .3s ease;box-shadow:var(--shadow)}
+@keyframes slideup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-header{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--accentl)}
+.result-badge{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--accent)}
+.result-badge-dot{width:7px;height:7px;background:var(--success);border-radius:50%}
+.result-actions{display:flex;gap:6px}
+.act-btn{padding:5px 13px;background:white;border:1px solid var(--border2);border-radius:20px;font-size:12px;color:var(--tx2);cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
+.act-btn:hover{border-color:var(--accent);color:var(--accent)}
+.result-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+.result-simple{font-size:15px;line-height:1.9;color:var(--tx)}
+.result-example{background:var(--bg2);border-radius:14px;padding:12px 14px;border-left:4px solid var(--accent2)}
+.ex-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.ex-text{font-size:13px;color:var(--tx2);line-height:1.7}
+.keywords{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-size:12px;padding:5px 13px;background:var(--accentl);border:1px solid rgba(240,125,58,0.25);border-radius:20px;color:var(--accent);cursor:pointer;transition:all .15s;font-weight:500}
+.kw:hover{background:var(--bg3)}
+
+/* QUIZ */
+.quiz-area{background:var(--bg4);border:1.5px solid var(--border2);border-radius:16px;padding:14px 16px}
+.quiz-label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.quiz-q{font-size:14px;color:var(--tx);font-weight:500;line-height:1.6;margin-bottom:12px}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:10px 14px;background:white;border:1.5px solid var(--border2);border-radius:12px;font-size:13px;color:var(--tx2);cursor:pointer;text-align:left;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
+.quiz-opt:hover{border-color:var(--accent);color:var(--tx)}
+.quiz-opt.correct{background:#e8f8f0;border-color:var(--success);color:#1a6b3a}
+.quiz-opt.wrong{background:#fdf0f0;border-color:var(--rd);color:var(--rd)}
+.quiz-result{font-size:13px;font-weight:500;padding:8px 12px;border-radius:10px;text-align:center;display:none}
+.quiz-result.show{display:block}
+.quiz-result.ok{background:#e8f8f0;color:#1a6b3a}
+.quiz-result.no{background:#fdf0f0;color:var(--rd)}
+
+/* HISTORY */
+.hist-item{background:white;border:1.5px solid var(--border);border-radius:16px;padding:14px 16px;cursor:pointer;transition:all .15s;animation:slideup .2s ease both;box-shadow:0 1px 6px rgba(200,140,90,0.06)}
+.hist-item:hover{border-color:var(--accent2);box-shadow:0 3px 12px rgba(240,125,58,0.1)}
+.hist-q{font-size:13px;color:var(--tx2);margin-bottom:5px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.5}
+.hist-a{font-size:13px;color:var(--tx);overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;font-weight:500}
+.hist-meta{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.hist-level{font-size:11px;color:var(--accent);background:var(--accentl);padding:2px 9px;border-radius:10px;font-weight:500}
+.hist-date{font-size:11px;color:var(--tx3)}
+.hist-del{font-size:11px;color:var(--tx3);cursor:pointer;padding:2px 6px}
+.hist-del:hover{color:var(--rd)}
+
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:12px}
+.empty-icon{font-size:48px;margin-bottom:4px}
+.empty-title{font-size:15px;font-weight:700;color:var(--tx2)}
+.empty-sub{font-size:13px;color:var(--tx3);line-height:1.7}
+
+/* PRIVACY PANEL */
+.panel{display:none;position:absolute;inset:0;background:var(--bg);z-index:100;flex-direction:column}
+.panel.show{display:flex}
+.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.back-btn{width:36px;height:36px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);box-shadow:var(--shadow)}
+.back-btn svg{width:16px;height:16px;stroke:var(--tx2);fill:none;stroke-width:2;stroke-linecap:round}
+.panel-title{font-size:16px;font-weight:700;color:var(--tx)}
+.panel-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.pcard{background:white;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 6px rgba(200,140,90,0.06)}
+.pcard-label{padding:12px 16px 8px;font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em}
+.pcard-row{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.pcard-title{font-size:14px;color:var(--tx);font-weight:500}
+.pcard-desc{font-size:12px;color:var(--tx3);line-height:1.6}
+.api-input{width:100%;padding:10px 14px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:10px;font-size:13px;font-family:'Noto Sans KR',sans-serif;color:var(--tx);outline:none;transition:border-color .15s}
+.api-input:focus{border-color:var(--accent)}
+.api-input::placeholder{color:var(--tx3)}
+.save-btn{padding:10px 20px;background:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;color:white;cursor:pointer;font-family:'Noto Sans KR',sans-serif;align-self:flex-start;transition:opacity .15s;box-shadow:0 3px 10px rgba(240,125,58,0.3)}
+.save-btn:hover{opacity:.85}
+.api-status{font-size:12px;padding:6px 10px;border-radius:8px;display:none}
+.api-status.ok{display:block;background:rgba(58,171,111,0.1);color:var(--success);border:1px solid rgba(58,171,111,0.25)}
+.api-status.err{display:block;background:rgba(224,80,80,0.08);color:var(--rd);border:1px solid rgba(224,80,80,0.2)}
+.danger-btn{padding:10px 20px;background:transparent;border:1.5px solid var(--rd);border-radius:10px;font-size:13px;font-weight:700;color:var(--rd);cursor:pointer;font-family:'Noto Sans KR',sans-serif;align-self:flex-start;transition:all .15s}
+.danger-btn:hover{background:var(--rd);color:white}
+
+/* LANG BTN */
+.lang-btn{padding:7px 14px;background:white;border:1.5px solid var(--border2);border-radius:20px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
+.lang-btn.on{background:var(--accentl);border-color:var(--accent);color:var(--accent)}
+.lang-btn:hover{border-color:var(--accent2)}
+.toast{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:12px;padding:10px 22px;font-size:13px;color:white;white-space:nowrap;transition:transform .25s ease;z-index:200;pointer-events:none;font-weight:500}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* HOME INDICATOR */
+.home-ind{height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1}
+.home-ind-bar{width:130px;height:5px;background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <span class="status-time" id="clock">9:41</span>
+  <div class="status-icons">
+    <svg viewBox="0 0 24 24"><path d="M1 6l5.5 5.5L12 6l5.5 5.5L23 6"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/></svg>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-row">
+    <div class="logo">
+      <div class="logo-mark">💬</div>
+      <div>
+        <div class="logo-text" id="app-name">말풀이</div>
+        <div class="logo-sub" id="app-sub">어려운 말을 쉽게</div>
+      </div>
+    </div>
+    <div class="hdr-btns">
+      <div class="icon-btn" onclick="openPanel('privacy-panel')" title="개인정보 보호">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="icon-btn" onclick="openPanel('settings-panel')" title="설정">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab on" id="tab-decode-btn" onclick="switchTab('decode',this)">풀이</div>
+  <div class="tab" id="tab-history-btn" onclick="switchTab('history',this)">기록</div>
+</div>
+
+<!-- SCROLL BODY -->
+<div class="scroll-body">
+
+  <!-- DECODE TAB -->
+  <div class="view on" id="tab-decode">
+
+    <!-- 개인정보 안내 -->
+    <div class="privacy-notice">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="privacy-text"><strong id="privacy-title">개인정보 보호 안내</strong><br><span id="privacy-desc">입력한 내용은 AI 분석 후 즉시 삭제되며 서버에 저장되지 않아요. 주민번호·카드번호 등 민감정보는 입력하지 마세요.</span></div>
+    </div>
+
+    <!-- 입력 방식 -->
+    <div>
+      <div class="slbl" id="lbl-input-mode">입력 방식</div>
+      <div class="mode-row">
+        <button class="mchip on" id="btn-mode-text" onclick="setMode(this,'text')">✏️ 텍스트 입력</button>
+        <button class="mchip" id="btn-mode-photo" onclick="setMode(this,'photo')">📷 사진 분석</button>
+      </div>
+    </div>
+
+    <div id="mode-text">
+      <div class="slbl" id="lbl-text">어려운 내용 입력</div>
+      <div class="input-wrap">
+        <textarea class="input-area" id="input-text" placeholder="이해하기 어려운 내용을 붙여넣거나 직접 입력해주세요&#10;&#10;예) 기준금리 인상에 따른 유동성 축소로 인해..." maxlength="2000" oninput="onInput()"></textarea>
+        <div class="input-footer">
+          <span class="char-count" id="char-count">0 / 2000</span>
+          <button class="clear-btn" id="clear-btn" onclick="clearInput()">지우기</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mode-photo" style="display:none">
+      <div class="slbl" id="lbl-photo">문서 사진으로 분석</div>
+      <div class="photo-preview" id="photo-preview">
+        <img id="preview-img" src="" alt="선택된 사진">
+        <button class="photo-remove" onclick="removePhoto()">✕</button>
+      </div>
+      <label class="photo-btn" for="file-input" id="photo-label">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><circle cx="12" cy="14" r="3"/><path d="M9 7l1.5-2h3L15 7"/></svg>
+        <span id="photo-label-text">사진 찍거나 파일 선택하기</span>
+      </label>
+      <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handlePhoto(this)">
+      <div class="pii-warn" id="pii-warn">⚠️ 주민등록번호, 카드번호, 계좌번호 등 민감한 개인정보가 포함된 문서는 업로드하지 마세요.</div>
+    </div>
+
+    <div>
+      <div class="slbl" id="lbl-level">설명 수준</div>
+      <div class="level-row">
+        <div class="lchip on" onclick="setLevel(this,t.lvl1)"><span class="lchip-emoji">🐣</span><span class="lchip-lbl" id="lbl-lvl1">초등학생</span></div>
+        <div class="lchip" onclick="setLevel(this,t.lvl2)"><span class="lchip-emoji">📚</span><span class="lchip-lbl" id="lbl-lvl2">중학생</span></div>
+        <div class="lchip" onclick="setLevel(this,t.lvl3)"><span class="lchip-emoji">🎓</span><span class="lchip-lbl" id="lbl-lvl3">고등학생</span></div>
+      </div>
+    </div>
+
+    <button class="main-btn" id="decode-btn" onclick="decode()">
+      💡 쉽게 풀어주기
+    </button>
+
+    <div id="result-area"></div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div class="view" id="tab-history">
+    <div id="history-list"></div>
+  </div>
+
+</div>
+
+<!-- 개인정보 보호 패널 -->
+<div class="panel" id="privacy-panel">
+  <div class="panel-header">
+    <div class="back-btn" onclick="closePanel('privacy-panel')">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="panel-title" id="privacy-panel-title">🛡️ 개인정보 보호</div>
+  </div>
+  <div class="panel-body">
+    <div class="pcard">
+      <div class="pcard-label">데이터 처리 방식</div>
+      <div class="pcard-row">
+        <div class="pcard-title">✅ 서버 저장 없음</div>
+        <div class="pcard-desc">입력한 텍스트와 사진은 AI 분석에만 사용되며 Anthropic API 처리 후 즉시 폐기돼요. 말풀이 서버에는 어떠한 내용도 저장하지 않아요.</div>
+      </div>
+      <div class="pcard-row">
+        <div class="pcard-title">✅ 로컬 기록만 저장</div>
+        <div class="pcard-desc">풀이 기록은 내 기기(브라우저)에만 저장돼요. 언제든 기록 탭에서 삭제할 수 있어요.</div>
+      </div>
+      <div class="pcard-row">
+        <div class="pcard-title">⚠️ 민감정보 주의</div>
+        <div class="pcard-desc">주민등록번호, 카드번호, 계좌번호, 의료정보 등 민감한 개인정보가 포함된 내용은 입력하지 마세요.</div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-label">AI 관련 안내</div>
+      <div class="pcard-row">
+        <div class="pcard-title">AI 생성 답변 정확성</div>
+        <div class="pcard-desc">AI가 생성한 설명은 참고용이에요. 법률·의료·금융 등 중요한 결정에는 전문가와 상담하세요.</div>
+      </div>
+      <div class="pcard-row">
+        <div class="pcard-title">저작권</div>
+        <div class="pcard-desc">저작권이 있는 텍스트나 문서를 입력할 경우 비상업적 학습·이해 목적으로만 사용하세요.</div>
+      </div>
+      <div class="pcard-row">
+        <div class="pcard-title">아동 이용자</div>
+        <div class="pcard-desc">만 14세 미만 어린이는 보호자와 함께 사용하는 것을 권장해요.</div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-label">데이터 삭제</div>
+      <div class="pcard-row">
+        <div class="pcard-title">로컬 기록 전체 삭제</div>
+        <div class="pcard-desc">내 기기에 저장된 풀이 기록을 모두 삭제해요.</div>
+        <button class="danger-btn" id="btn-delete-all" onclick="clearAllData()">모든 기록 삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 설정 패널 -->
+<div class="panel" id="settings-panel">
+  <div class="panel-header">
+    <div class="back-btn" onclick="closePanel('settings-panel')">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="panel-title" id="settings-panel-title">⚙️ 설정</div>
+  </div>
+  <div class="panel-body">
+    <div class="pcard">
+      <div class="pcard-label" id="lbl-lang">언어 / Language</div>
+      <div class="pcard-row">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="lang-btn on" data-lang="ko" onclick="setLang('ko')">🇰🇷 한국어</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en')">🇺🇸 English</button>
+          <button class="lang-btn" data-lang="ja" onclick="setLang('ja')">🇯🇵 日本語</button>
+          <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">🇨🇳 中文</button>
+          <button class="lang-btn" data-lang="es" onclick="setLang('es')">🇪🇸 Español</button>
+          <button class="lang-btn" data-lang="pt" onclick="setLang('pt')">🇧🇷 Português</button>
+          <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷 Français</button>
+          <button class="lang-btn" data-lang="hi" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+          <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">🇧🇩 বাংলা</button>
+          <button class="lang-btn" data-lang="id" onclick="setLang('id')">🇮🇩 Indonesia</button>
+          <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+          <button class="lang-btn" data-lang="sw" onclick="setLang('sw')">🌍 Kiswahili</button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-label" id="lbl-api-section">API 설정</div>
+      <div class="pcard-row">
+        <div class="pcard-title" id="lbl-api-title">Anthropic API 키</div>
+        <div class="pcard-desc" id="lbl-api-desc">Claude AI 기능을 사용하려면 API 키가 필요해요. console.anthropic.com 에서 발급받을 수 있어요.</div>
+        <input class="api-input" type="password" id="api-key-input" placeholder="sk-ant-api03-...">
+        <button class="save-btn" id="btn-save-api" onclick="saveApiKey()">저장하기</button>
+        <div class="api-status" id="api-status"></div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-label">PWA</div>
+      <div class="pcard-row">
+        <div class="pcard-title">📱 홈 화면에 추가</div>
+        <div class="pcard-desc">Safari → 공유 버튼 → "홈 화면에 추가" 를 선택하면 앱처럼 사용할 수 있어요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME INDICATOR -->
+<div class="home-ind"><div class="home-ind-bar"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+let currentLevel = '초등학생';
+let currentMode = 'text';
+let currentPhoto = null;
+let historyData = JSON.parse(localStorage.getItem('malpuri_v2') || '[]');
+
+const I18N = {
+  ko: {
+    appName:'말풀이',appSub:'어려운 말을 쉽게',tabDecode:'풀이',tabHistory:'기록',
+    privacyTitle:'개인정보 보호 안내',privacyDesc:'입력한 내용은 AI 분석 후 즉시 삭제되며 서버에 저장되지 않아요. 주민번호·카드번호 등 민감정보는 입력하지 마세요.',
+    inputMode:'입력 방식',modeText:'✏️ 텍스트 입력',modePhoto:'📷 사진 분석',
+    textLabel:'어려운 내용 입력',textPlaceholder:'이해하기 어려운 내용을 붙여넣거나 직접 입력해주세요\n\n예) 기준금리 인상에 따른 유동성 축소로 인해...',
+    clearBtn:'지우기',photoLabel:'사진 찍거나 파일 선택하기',photoSection:'문서 사진으로 분석',
+    piiWarn:'⚠️ 주민등록번호, 카드번호, 계좌번호 등 민감한 개인정보가 포함된 문서는 업로드하지 마세요.',
+    levelLabel:'설명 수준',lvl1:'초등학생',lvl2:'중학생',lvl3:'고등학생',
+    mainBtn:'💡 쉽게 풀어주기',loadingBtn:'풀이 중...',
+    emptyTitle:'아직 기록이 없어요',emptySub:'풀이 탭에서 어려운 내용을\n분석해보세요',
+    copyBtn:'복사',copiedMsg:'복사됐어요!',exampleLabel:'이렇게 생각해봐요',
+    keywordsLabel:'핵심 단어 (눌러서 더 알아보기)',quizLabel:'🧩 이해도 퀴즈',
+    quizCorrect:'🎉 정답이에요! 잘 이해했어요.',quizWrong:'아쉬워요! 정답을 확인해보세요.',
+    toastSearch:'검색할게요',noInput:'내용을 입력하거나 사진을 선택해주세요',noKey:'설정에서 API 키를 먼저 입력해주세요',
+    settingsTitle:'⚙️ 설정',privacyPanelTitle:'🛡️ 개인정보 보호',
+    apiLabel:'API 설정',apiTitle:'Anthropic API 키',apiDesc:'Claude AI 기능을 사용하려면 API 키가 필요해요. console.anthropic.com 에서 발급받을 수 있어요.',
+    saveBtn:'저장하기',apiOk:'API 키가 저장됐어요!',apiErr:'올바른 API 키 형식이 아니에요',
+    langLabel:'언어 / Language',deleteAllBtn:'모든 기록 삭제',deleteConfirm:'모든 기록을 삭제할까요?',deleteMsg:'기록이 삭제됐어요',levelSuffix:' 눈높이',
+  },
+  en: {
+    appName:'PlainTalk',appSub:'Make hard words easy',tabDecode:'Explain',tabHistory:'History',
+    privacyTitle:'Privacy Notice',privacyDesc:'Your input is deleted immediately after AI analysis and never stored on our servers. Do not enter sensitive info like SSN or card numbers.',
+    inputMode:'Input Method',modeText:'✏️ Text Input',modePhoto:'📷 Photo Scan',
+    textLabel:'Enter difficult content',textPlaceholder:'Paste or type content you find hard to understand\n\nEx) The quantitative tightening resulting from rate hikes...',
+    clearBtn:'Clear',photoLabel:'Take a photo or select a file',photoSection:'Analyze document photo',
+    piiWarn:'⚠️ Do not upload documents containing sensitive personal information such as SSN, card numbers, or account numbers.',
+    levelLabel:'Explanation Level',lvl1:'Elementary',lvl2:'Middle School',lvl3:'High School',
+    mainBtn:'💡 Explain Simply',loadingBtn:'Explaining...',
+    emptyTitle:'No history yet',emptySub:'Analyze difficult content\nin the Explain tab',
+    copyBtn:'Copy',copiedMsg:'Copied!',exampleLabel:'Think of it this way',
+    keywordsLabel:'Key words (tap to explore)',quizLabel:'🧩 Comprehension Quiz',
+    quizCorrect:'🎉 Correct! Great understanding.',quizWrong:'Not quite! Check the correct answer.',
+    toastSearch:'— searching',noInput:'Please enter content or select a photo',noKey:'Please enter your API key in Settings first',
+    settingsTitle:'⚙️ Settings',privacyPanelTitle:'🛡️ Privacy',
+    apiLabel:'API Settings',apiTitle:'Anthropic API Key',apiDesc:'An API key is required to use Claude AI. Get one at console.anthropic.com.',
+    saveBtn:'Save',apiOk:'API key saved!',apiErr:'Invalid API key format',
+    langLabel:'Language',deleteAllBtn:'Delete all history',deleteConfirm:'Delete all history?',deleteMsg:'History deleted',levelSuffix:' level',
+  },
+  ja: {
+    appName:'やさしく',appSub:'むずかしい言葉をわかりやすく',tabDecode:'解説',tabHistory:'履歴',
+    privacyTitle:'プライバシーのご案内',privacyDesc:'入力内容はAI分析後に即削除され、サーバーには保存されません。個人番号・カード番号等は入力しないでください。',
+    inputMode:'入力方法',modeText:'✏️ テキスト入力',modePhoto:'📷 写真で分析',
+    textLabel:'わかりにくい内容を入力',textPlaceholder:'わかりにくい内容を貼り付けるか入力してください\n\n例）金利引き上げによる流動性の縮小により...',
+    clearBtn:'クリア',photoLabel:'写真を撮るかファイルを選択',photoSection:'書類写真で分析',
+    piiWarn:'⚠️ マイナンバー、カード番号、口座番号などの個人情報を含む書類はアップロードしないでください。',
+    levelLabel:'説明レベル',lvl1:'小学生',lvl2:'中学生',lvl3:'高校生',
+    mainBtn:'💡 わかりやすく説明',loadingBtn:'解説中...',
+    emptyTitle:'履歴がありません',emptySub:'解説タブで難しい内容を\n分析してみましょう',
+    copyBtn:'コピー',copiedMsg:'コピーしました！',exampleLabel:'こう考えてみて',
+    keywordsLabel:'キーワード（タップして詳しく）',quizLabel:'🧩 理解度クイズ',
+    quizCorrect:'🎉 正解！よく理解できています。',quizWrong:'惜しい！正解を確認してみてください。',
+    toastSearch:'を検索します',noInput:'テキストまたは写真を入力してください',noKey:'設定でAPIキーを入力してください',
+    settingsTitle:'⚙️ 設定',privacyPanelTitle:'🛡️ プライバシー',
+    apiLabel:'API設定',apiTitle:'Anthropic APIキー',apiDesc:'Claude AIを使用するにはAPIキーが必要です。console.anthropic.comで取得できます。',
+    saveBtn:'保存',apiOk:'APIキーを保存しました！',apiErr:'APIキーの形式が正しくありません',
+    langLabel:'言語 / Language',deleteAllBtn:'全履歴を削除',deleteConfirm:'全履歴を削除しますか？',deleteMsg:'履歴を削除しました',levelSuffix:'レベル',
+  },
+  zh: {
+    appName:'易懂说',appSub:'让难懂的话变简单',tabDecode:'解释',tabHistory:'历史',
+    privacyTitle:'隐私保护提示',privacyDesc:'您输入的内容在AI分析后立即删除，不会存储在服务器上。请勿输入身份证号、银行卡号等敏感信息。',
+    inputMode:'输入方式',modeText:'✏️ 文字输入',modePhoto:'📷 拍照分析',
+    textLabel:'输入难懂的内容',textPlaceholder:'请粘贴或输入您觉得难以理解的内容\n\n例）由于加息导致的流动性收缩...',
+    clearBtn:'清空',photoLabel:'拍照或选择文件',photoSection:'拍照分析文档',
+    piiWarn:'⚠️ 请勿上传含有身份证号、银行卡号、账户号码等敏感个人信息的文件。',
+    levelLabel:'说明级别',lvl1:'小学生',lvl2:'初中生',lvl3:'高中生',
+    mainBtn:'💡 简单解释',loadingBtn:'解释中...',
+    emptyTitle:'暂无历史记录',emptySub:'在解释标签中\n分析难懂的内容吧',
+    copyBtn:'复制',copiedMsg:'已复制！',exampleLabel:'这样想一想',
+    keywordsLabel:'关键词（点击深入了解）',quizLabel:'🧩 理解测验',
+    quizCorrect:'🎉 正确！理解得很好。',quizWrong:'差一点！请查看正确答案。',
+    toastSearch:' 搜索中',noInput:'请输入内容或选择照片',noKey:'请先在设置中输入API密钥',
+    settingsTitle:'⚙️ 设置',privacyPanelTitle:'🛡️ 隐私保护',
+    apiLabel:'API设置',apiTitle:'Anthropic API密钥',apiDesc:'使用Claude AI功能需要API密钥。请在console.anthropic.com获取。',
+    saveBtn:'保存',apiOk:'API密钥已保存！',apiErr:'API密钥格式不正确',
+    langLabel:'语言 / Language',deleteAllBtn:'删除全部历史',deleteConfirm:'确定删除全部历史吗？',deleteMsg:'历史已删除',levelSuffix:'水平',
+  },
+  es: {
+    appName:'HablaFácil',appSub:'Palabras difíciles, fáciles de entender',tabDecode:'Explicar',tabHistory:'Historial',
+    privacyTitle:'Aviso de Privacidad',privacyDesc:'Tu contenido se elimina inmediatamente tras el análisis de IA y no se almacena en servidores. No introduzcas información sensible como DNI o números de tarjeta.',
+    inputMode:'Método de entrada',modeText:'✏️ Texto',modePhoto:'📷 Foto',
+    textLabel:'Ingresa el contenido difícil',textPlaceholder:'Pega o escribe el contenido que te resulta difícil de entender...',
+    clearBtn:'Borrar',photoLabel:'Tomar foto o seleccionar archivo',photoSection:'Analizar foto del documento',
+    piiWarn:'⚠️ No subas documentos con información personal sensible como DNI, tarjetas o cuentas bancarias.',
+    levelLabel:'Nivel de explicación',lvl1:'Primaria',lvl2:'Secundaria',lvl3:'Bachillerato',
+    mainBtn:'💡 Explicar fácil',loadingBtn:'Explicando...',
+    emptyTitle:'Sin historial aún',emptySub:'Analiza contenido difícil\nen la pestaña Explicar',
+    copyBtn:'Copiar',copiedMsg:'¡Copiado!',exampleLabel:'Piénsalo así',
+    keywordsLabel:'Palabras clave (toca para explorar)',quizLabel:'🧩 Test de comprensión',
+    quizCorrect:'🎉 ¡Correcto! Muy bien entendido.',quizWrong:'¡Casi! Revisa la respuesta correcta.',
+    toastSearch:' buscando',noInput:'Por favor ingresa texto o selecciona una foto',noKey:'Por favor ingresa tu clave API en Configuración',
+    settingsTitle:'⚙️ Configuración',privacyPanelTitle:'🛡️ Privacidad',
+    apiLabel:'Configuración API',apiTitle:'Clave API de Anthropic',apiDesc:'Se necesita una clave API para usar Claude AI. Consíguela en console.anthropic.com.',
+    saveBtn:'Guardar',apiOk:'¡Clave API guardada!',apiErr:'Formato de clave API inválido',
+    langLabel:'Idioma / Language',deleteAllBtn:'Borrar todo el historial',deleteConfirm:'¿Borrar todo el historial?',deleteMsg:'Historial borrado',levelSuffix:' nivel',
+  },
+  pt: {
+    appName:'FalaFácil',appSub:'Palavras difíceis, explicadas fácil',tabDecode:'Explicar',tabHistory:'Histórico',
+    privacyTitle:'Aviso de Privacidade',privacyDesc:'Seu conteúdo é deletado imediatamente após a análise de IA e nunca armazenado em servidores. Não insira informações sensíveis como CPF ou números de cartão.',
+    inputMode:'Modo de entrada',modeText:'✏️ Texto',modePhoto:'📷 Foto',
+    textLabel:'Digite o conteúdo difícil',textPlaceholder:'Cole ou escreva o conteúdo difícil de entender...\n\nEx) O aperto quantitativo resultante do aumento das taxas...',
+    clearBtn:'Limpar',photoLabel:'Tirar foto ou selecionar arquivo',photoSection:'Analisar foto do documento',
+    piiWarn:'⚠️ Não envie documentos com informações pessoais sensíveis como CPF, cartões ou contas bancárias.',
+    levelLabel:'Nível de explicação',lvl1:'Ensino Fundamental',lvl2:'Ensino Médio',lvl3:'Pré-vestibular',
+    mainBtn:'💡 Explicar fácil',loadingBtn:'Explicando...',
+    emptyTitle:'Sem histórico ainda',emptySub:'Analise conteúdo difícil\nna aba Explicar',
+    copyBtn:'Copiar',copiedMsg:'Copiado!',exampleLabel:'Pense assim',
+    keywordsLabel:'Palavras-chave (toque para explorar)',quizLabel:'🧩 Quiz de compreensão',
+    quizCorrect:'🎉 Correto! Muito bem entendido.',quizWrong:'Quase! Veja a resposta correta.',
+    toastSearch:' buscando',noInput:'Por favor insira texto ou selecione uma foto',noKey:'Por favor insira sua chave API nas Configurações',
+    settingsTitle:'⚙️ Configurações',privacyPanelTitle:'🛡️ Privacidade',
+    apiLabel:'Config. API',apiTitle:'Chave API Anthropic',apiDesc:'É necessária uma chave API para usar o Claude AI. Obtenha em console.anthropic.com.',
+    saveBtn:'Salvar',apiOk:'Chave API salva!',apiErr:'Formato de chave API inválido',
+    langLabel:'Idioma / Language',deleteAllBtn:'Apagar todo histórico',deleteConfirm:'Apagar todo o histórico?',deleteMsg:'Histórico apagado',levelSuffix:' nível',
+  },
+  sw: {
+    appName:'ElezaRahisi',appSub:'Maneno magumu, yanayoeleweka',tabDecode:'Eleza',tabHistory:'Historia',
+    privacyTitle:'Notisi ya Faragha',privacyDesc:'Maudhui yako yanafutwa mara moja baada ya uchambuzi wa AI na hayahifadhiwa kwenye seva. Usiweke nambari za kitambulisho au kadi.',
+    inputMode:'Njia ya kuingiza',modeText:'✏️ Maandishi',modePhoto:'📷 Picha',
+    textLabel:'Ingiza maudhui magumu',textPlaceholder:'Bandika au andika maudhui unayoyapata magumu kuelewa...',
+    clearBtn:'Futa',photoLabel:'Piga picha au chagua faili',photoSection:'Changanua picha ya hati',
+    piiWarn:'⚠️ Usipakiuye hati zenye taarifa nyeti kama nambari ya kitambulisho au akaunti ya benki.',
+    levelLabel:'Kiwango cha maelezo',lvl1:'Shule ya Msingi',lvl2:'Shule ya Sekondari',lvl3:'Chuo',
+    mainBtn:'💡 Eleza Rahisi',loadingBtn:'Inaeleza...',
+    emptyTitle:'Hakuna historia bado',emptySub:'Changanua maudhui magumu\nkatika kichupo cha Eleza',
+    copyBtn:'Nakili',copiedMsg:'Imenakiliwa!',exampleLabel:'Fikiria hivi',
+    keywordsLabel:'Maneno muhimu (gusa kuchunguza)',quizLabel:'🧩 Jaribio la uelewa',
+    quizCorrect:'🎉 Sahihi! Umeelewa vizuri.',quizWrong:'Karibu! Angalia jibu sahihi.',
+    toastSearch:' inatafuta',noInput:'Tafadhali ingiza maandishi au chagua picha',noKey:'Tafadhali ingiza ufunguo wa API katika Mipangilio',
+    settingsTitle:'⚙️ Mipangilio',privacyPanelTitle:'🛡️ Faragha',
+    apiLabel:'Mipangilio ya API',apiTitle:'Ufunguo wa API wa Anthropic',apiDesc:'Ufunguo wa API unahitajika kutumia Claude AI. Pata kwenye console.anthropic.com.',
+    saveBtn:'Hifadhi',apiOk:'Ufunguo wa API umehifadhiwa!',apiErr:'Umbizo la ufunguo wa API si sahihi',
+    langLabel:'Lugha / Language',deleteAllBtn:'Futa historia yote',deleteConfirm:'Futa historia yote?',deleteMsg:'Historia imefutwa',levelSuffix:' kiwango',
+  },
+  fr: {
+    appName:'ParlerSimple',appSub:'Les mots difficiles, expliqués simplement',tabDecode:'Expliquer',tabHistory:'Historique',
+    privacyTitle:'Avis de confidentialité',privacyDesc:'Votre contenu est supprimé immédiatement après l\'analyse IA et n\'est jamais stocké sur nos serveurs. Ne saisissez pas d\'informations sensibles.',
+    inputMode:'Mode de saisie',modeText:'✏️ Texte',modePhoto:'📷 Photo',
+    textLabel:'Entrez le contenu difficile',textPlaceholder:'Collez ou tapez le contenu difficile à comprendre...\n\nEx) Le resserrement quantitatif résultant des hausses de taux...',
+    clearBtn:'Effacer',photoLabel:'Prendre une photo ou sélectionner un fichier',photoSection:'Analyser la photo du document',
+    piiWarn:'⚠️ Ne téléchargez pas de documents contenant des informations personnelles sensibles.',
+    levelLabel:'Niveau d\'explication',lvl1:'École primaire',lvl2:'Collège',lvl3:'Lycée',
+    mainBtn:'💡 Expliquer simplement',loadingBtn:'Explication...',
+    emptyTitle:'Pas encore d\'historique',emptySub:'Analysez du contenu difficile\ndans l\'onglet Expliquer',
+    copyBtn:'Copier',copiedMsg:'Copié !',exampleLabel:'Pensez-y ainsi',
+    keywordsLabel:'Mots clés (appuyez pour explorer)',quizLabel:'🧩 Quiz de compréhension',
+    quizCorrect:'🎉 Correct ! Très bien compris.',quizWrong:'Presque ! Vérifiez la bonne réponse.',
+    toastSearch:' recherche',noInput:'Veuillez saisir du texte ou sélectionner une photo',noKey:'Veuillez d\'abord saisir votre clé API dans les Paramètres',
+    settingsTitle:'⚙️ Paramètres',privacyPanelTitle:'🛡️ Confidentialité',
+    apiLabel:'Paramètres API',apiTitle:'Clé API Anthropic',apiDesc:'Une clé API est nécessaire pour utiliser Claude AI. Obtenez-en une sur console.anthropic.com.',
+    saveBtn:'Enregistrer',apiOk:'Clé API enregistrée !',apiErr:'Format de clé API invalide',
+    langLabel:'Langue / Language',deleteAllBtn:'Supprimer tout l\'historique',deleteConfirm:'Supprimer tout l\'historique ?',deleteMsg:'Historique supprimé',levelSuffix:' niveau',
+  },
+  hi: {
+    appName:'सरलभाषा',appSub:'कठिन शब्द, आसान भाषा में',tabDecode:'समझाएं',tabHistory:'इतिहास',
+    privacyTitle:'गोपनीयता सूचना',privacyDesc:'आपकी सामग्री AI विश्लेषण के तुरंत बाद हटा दी जाती है और सर्वर पर संग्रहीत नहीं होती। आधार नंबर या कार्ड नंबर जैसी संवेदनशील जानकारी न डालें।',
+    inputMode:'इनपुट विधि',modeText:'✏️ टेक्स्ट',modePhoto:'📷 फोटो',
+    textLabel:'कठिन सामग्री दर्ज करें',textPlaceholder:'वह सामग्री पेस्ट करें या टाइप करें जो समझना मुश्किल लगती है...',
+    clearBtn:'साफ़ करें',photoLabel:'फोटो लें या फ़ाइल चुनें',photoSection:'दस्तावेज़ फोटो का विश्लेषण',
+    piiWarn:'⚠️ आधार नंबर, कार्ड नंबर, खाता संख्या जैसी संवेदनशील जानकारी वाले दस्तावेज़ अपलोड न करें।',
+    levelLabel:'स्पष्टीकरण स्तर',lvl1:'प्राथमिक',lvl2:'माध्यमिक',lvl3:'उच्च माध्यमिक',
+    mainBtn:'💡 आसान में समझाएं',loadingBtn:'समझा रहे हैं...',
+    emptyTitle:'अभी कोई इतिहास नहीं',emptySub:'समझाएं टैब में\nकठिन सामग्री का विश्लेषण करें',
+    copyBtn:'कॉपी',copiedMsg:'कॉपी हो गया!',exampleLabel:'इस तरह सोचें',
+    keywordsLabel:'मुख्य शब्द (जानने के लिए टैप करें)',quizLabel:'🧩 समझ परीक्षण',
+    quizCorrect:'🎉 सही! बहुत अच्छी समझ।',quizWrong:'लगभग सही! सही उत्तर देखें।',
+    toastSearch:' खोज रहे हैं',noInput:'कृपया टेक्स्ट दर्ज करें या फोटो चुनें',noKey:'कृपया पहले सेटिंग में API कुंजी दर्ज करें',
+    settingsTitle:'⚙️ सेटिंग',privacyPanelTitle:'🛡️ गोपनीयता',
+    apiLabel:'API सेटिंग',apiTitle:'Anthropic API कुंजी',apiDesc:'Claude AI का उपयोग करने के लिए API कुंजी आवश्यक है। console.anthropic.com पर प्राप्त करें।',
+    saveBtn:'सहेजें',apiOk:'API कुंजी सहेजी गई!',apiErr:'API कुंजी प्रारूप अमान्य',
+    langLabel:'भाषा / Language',deleteAllBtn:'सारा इतिहास हटाएं',deleteConfirm:'सारा इतिहास हटाएं?',deleteMsg:'इतिहास हटाया गया',levelSuffix:' स्तर',
+  },
+  bn: {
+    appName:'সহজকথা',appSub:'কঠিন কথা সহজে বুঝুন',tabDecode:'বোঝান',tabHistory:'ইতিহাস',
+    privacyTitle:'গোপনীয়তার নোটিশ',privacyDesc:'আপনার বিষয়বস্তু AI বিশ্লেষণের পরে অবিলম্বে মুছে ফেলা হয় এবং সার্ভারে সংরক্ষিত হয় না। NID বা কার্ড নম্বরের মতো সংবেদনশীল তথ্য প্রবেশ করবেন না।',
+    inputMode:'ইনপুট পদ্ধতি',modeText:'✏️ টেক্সট',modePhoto:'📷 ছবি',
+    textLabel:'কঠিন বিষয়বস্তু লিখুন',textPlaceholder:'বুঝতে কষ্ট হচ্ছে এমন বিষয়বস্তু পেস্ট করুন বা টাইপ করুন...',
+    clearBtn:'মুছুন',photoLabel:'ছবি তুলুন বা ফাইল নির্বাচন করুন',photoSection:'নথির ছবি বিশ্লেষণ',
+    piiWarn:'⚠️ NID, কার্ড নম্বর, অ্যাকাউন্ট নম্বরসহ সংবেদনশীল তথ্য আছে এমন নথি আপলোড করবেন না।',
+    levelLabel:'ব্যাখ্যার স্তর',lvl1:'প্রাথমিক',lvl2:'মাধ্যমিক',lvl3:'উচ্চ মাধ্যমিক',
+    mainBtn:'💡 সহজে বোঝান',loadingBtn:'বোঝানো হচ্ছে...',
+    emptyTitle:'এখনও কোনো ইতিহাস নেই',emptySub:'বোঝান ট্যাবে\nকঠিন বিষয়বস্তু বিশ্লেষণ করুন',
+    copyBtn:'কপি',copiedMsg:'কপি হয়েছে!',exampleLabel:'এভাবে ভাবুন',
+    keywordsLabel:'মূল শব্দ (জানতে ট্যাপ করুন)',quizLabel:'🧩 বোঝার পরীক্ষা',
+    quizCorrect:'🎉 সঠিক! খুব ভালো বুঝেছেন।',quizWrong:'প্রায় সঠিক! সঠিক উত্তর দেখুন।',
+    toastSearch:' খোঁজা হচ্ছে',noInput:'অনুগ্রহ করে টেক্সট লিখুন বা ছবি নির্বাচন করুন',noKey:'অনুগ্রহ করে প্রথমে সেটিংসে API কী লিখুন',
+    settingsTitle:'⚙️ সেটিংস',privacyPanelTitle:'🛡️ গোপনীয়তা',
+    apiLabel:'API সেটিংস',apiTitle:'Anthropic API কী',apiDesc:'Claude AI ব্যবহার করতে API কী প্রয়োজন। console.anthropic.com থেকে পান।',
+    saveBtn:'সংরক্ষণ',apiOk:'API কী সংরক্ষিত!',apiErr:'API কী ফরম্যাট ভুল',
+    langLabel:'ভাষা / Language',deleteAllBtn:'সব ইতিহাস মুছুন',deleteConfirm:'সব ইতিহাস মুছবেন?',deleteMsg:'ইতিহাস মুছে গেছে',levelSuffix:' স্তর',
+  },
+  id: {
+    appName:'BahasaMudah',appSub:'Kata sulit, dijelaskan mudah',tabDecode:'Jelaskan',tabHistory:'Riwayat',
+    privacyTitle:'Pemberitahuan Privasi',privacyDesc:'Konten Anda dihapus segera setelah analisis AI dan tidak pernah disimpan di server. Jangan masukkan informasi sensitif seperti NIK atau nomor kartu.',
+    inputMode:'Metode input',modeText:'✏️ Teks',modePhoto:'📷 Foto',
+    textLabel:'Masukkan konten yang sulit',textPlaceholder:'Tempel atau ketik konten yang sulit dipahami...\n\nCth) Pengetatan kuantitatif akibat kenaikan suku bunga...',
+    clearBtn:'Hapus',photoLabel:'Ambil foto atau pilih file',photoSection:'Analisis foto dokumen',
+    piiWarn:'⚠️ Jangan unggah dokumen yang berisi informasi pribadi sensitif seperti NIK, kartu, atau rekening bank.',
+    levelLabel:'Tingkat penjelasan',lvl1:'SD',lvl2:'SMP',lvl3:'SMA',
+    mainBtn:'💡 Jelaskan Mudah',loadingBtn:'Menjelaskan...',
+    emptyTitle:'Belum ada riwayat',emptySub:'Analisis konten sulit\ndi tab Jelaskan',
+    copyBtn:'Salin',copiedMsg:'Disalin!',exampleLabel:'Bayangkan begini',
+    keywordsLabel:'Kata kunci (ketuk untuk jelajahi)',quizLabel:'🧩 Kuis pemahaman',
+    quizCorrect:'🎉 Benar! Pemahaman bagus.',quizWrong:'Hampir! Cek jawaban yang benar.',
+    toastSearch:' mencari',noInput:'Masukkan teks atau pilih foto',noKey:'Masukkan kunci API di Pengaturan terlebih dahulu',
+    settingsTitle:'⚙️ Pengaturan',privacyPanelTitle:'🛡️ Privasi',
+    apiLabel:'Pengaturan API',apiTitle:'Kunci API Anthropic',apiDesc:'Kunci API diperlukan untuk menggunakan Claude AI. Dapatkan di console.anthropic.com.',
+    saveBtn:'Simpan',apiOk:'Kunci API disimpan!',apiErr:'Format kunci API tidak valid',
+    langLabel:'Bahasa / Language',deleteAllBtn:'Hapus semua riwayat',deleteConfirm:'Hapus semua riwayat?',deleteMsg:'Riwayat dihapus',levelSuffix:' level',
+  },
+  vi: {
+    appName:'NóiDễHiểu',appSub:'Từ khó, giải thích dễ hiểu',tabDecode:'Giải thích',tabHistory:'Lịch sử',
+    privacyTitle:'Thông báo quyền riêng tư',privacyDesc:'Nội dung của bạn được xóa ngay sau khi phân tích AI và không bao giờ được lưu trên máy chủ. Không nhập thông tin nhạy cảm như CMND hoặc số thẻ.',
+    inputMode:'Phương thức nhập',modeText:'✏️ Văn bản',modePhoto:'📷 Ảnh',
+    textLabel:'Nhập nội dung khó hiểu',textPlaceholder:'Dán hoặc nhập nội dung bạn thấy khó hiểu...',
+    clearBtn:'Xóa',photoLabel:'Chụp ảnh hoặc chọn tệp',photoSection:'Phân tích ảnh tài liệu',
+    piiWarn:'⚠️ Không tải lên tài liệu chứa thông tin cá nhân nhạy cảm như CMND, số thẻ hoặc tài khoản ngân hàng.',
+    levelLabel:'Mức độ giải thích',lvl1:'Tiểu học',lvl2:'THCS',lvl3:'THPT',
+    mainBtn:'💡 Giải thích đơn giản',loadingBtn:'Đang giải thích...',
+    emptyTitle:'Chưa có lịch sử',emptySub:'Phân tích nội dung khó\nở tab Giải thích',
+    copyBtn:'Sao chép',copiedMsg:'Đã sao chép!',exampleLabel:'Hãy nghĩ như thế này',
+    keywordsLabel:'Từ khóa (nhấn để khám phá)',quizLabel:'🧩 Bài kiểm tra hiểu biết',
+    quizCorrect:'🎉 Đúng rồi! Hiểu rất tốt.',quizWrong:'Gần đúng! Xem đáp án đúng nhé.',
+    toastSearch:' đang tìm',noInput:'Vui lòng nhập văn bản hoặc chọn ảnh',noKey:'Vui lòng nhập khóa API trong Cài đặt trước',
+    settingsTitle:'⚙️ Cài đặt',privacyPanelTitle:'🛡️ Quyền riêng tư',
+    apiLabel:'Cài đặt API',apiTitle:'Khóa API Anthropic',apiDesc:'Cần khóa API để sử dụng Claude AI. Lấy tại console.anthropic.com.',
+    saveBtn:'Lưu',apiOk:'Đã lưu khóa API!',apiErr:'Định dạng khóa API không hợp lệ',
+    langLabel:'Ngôn ngữ / Language',deleteAllBtn:'Xóa tất cả lịch sử',deleteConfirm:'Xóa tất cả lịch sử?',deleteMsg:'Đã xóa lịch sử',levelSuffix:' cấp độ',
+  },
+};
+
+const SUPPORTED = ['ko','en','ja','zh','es','pt','sw','fr','hi','bn','id','vi'];
+function detectLang() {
+  const saved = localStorage.getItem('malpuri_lang');
+  if (saved && SUPPORTED.includes(saved)) return saved;
+  const browser = (navigator.language || 'en').slice(0,2).toLowerCase();
+  return SUPPORTED.includes(browser) ? browser : 'en';
+}
+let currentLang = detectLang();
+let t = I18N[currentLang];
+
+function applyLang() {
+  t = I18N[currentLang];
+  const q = id => document.getElementById(id);
+  q('app-name').textContent = t.appName;
+  q('app-sub').textContent = t.appSub;
+  q('tab-decode-btn').textContent = t.tabDecode;
+  q('tab-history-btn').textContent = t.tabHistory;
+  q('privacy-title').textContent = t.privacyTitle;
+  q('privacy-desc').textContent = t.privacyDesc;
+  q('lbl-input-mode').textContent = t.inputMode;
+  q('btn-mode-text').textContent = t.modeText;
+  q('btn-mode-photo').textContent = t.modePhoto;
+  q('lbl-text').textContent = t.textLabel;
+  q('input-text').placeholder = t.textPlaceholder;
+  q('clear-btn').textContent = t.clearBtn;
+  q('lbl-photo').textContent = t.photoSection;
+  q('photo-label-text').textContent = t.photoLabel;
+  q('pii-warn').textContent = t.piiWarn;
+  q('lbl-level').textContent = t.levelLabel;
+  q('lbl-lvl1').textContent = t.lvl1;
+  q('lbl-lvl2').textContent = t.lvl2;
+  q('lbl-lvl3').textContent = t.lvl3;
+  q('decode-btn').innerHTML = t.mainBtn;
+  q('settings-panel-title').textContent = t.settingsTitle;
+  q('lbl-api-section').textContent = t.apiLabel;
+  q('lbl-api-title').textContent = t.apiTitle;
+  q('lbl-api-desc').textContent = t.apiDesc;
+  q('btn-save-api').textContent = t.saveBtn;
+  q('lbl-lang').textContent = t.langLabel;
+  q('privacy-panel-title').textContent = t.privacyPanelTitle;
+  q('btn-delete-all').textContent = t.deleteAllBtn;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('on', b.dataset.lang === currentLang));
+  currentLevel = t.lvl1;
+  document.querySelectorAll('.lchip').forEach((c,i) => { c.querySelector('.lchip-lbl').textContent = [t.lvl1,t.lvl2,t.lvl3][i]; });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('malpuri_lang', lang);
+  applyLang();
+  showToast(I18N[lang].appSub);
+}
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+}
+updateClock(); setInterval(updateClock, 10000);
+applyLang();
+
+// Service Worker 등록 (PWA)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
+// Input
+function onInput() {
+  const len = document.getElementById('input-text').value.length;
+  document.getElementById('char-count').textContent = len + ' / 2000';
+}
+function clearInput() {
+  document.getElementById('input-text').value = '';
+  document.getElementById('char-count').textContent = '0 / 2000';
+}
+
+// Mode
+function setMode(el, mode) {
+  document.querySelectorAll('.mchip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  currentMode = mode;
+  document.getElementById('mode-text').style.display = mode === 'text' ? 'block' : 'none';
+  document.getElementById('mode-photo').style.display = mode === 'photo' ? 'block' : 'none';
+
+  if (mode === 'text') {
+    // 사진 초기화
+    currentPhoto = null;
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('photo-label').style.display = 'flex';
+    document.getElementById('file-input').value = '';
+    document.getElementById('pii-warn').classList.remove('show');
+  } else {
+    // 텍스트 초기화
+    document.getElementById('input-text').value = '';
+    document.getElementById('char-count').textContent = '0 / 2000';
+    document.getElementById('pii-warn').classList.add('show');
+  }
+
+  // 결과 영역도 초기화
+  document.getElementById('result-area').innerHTML = '';
+}
+
+// Level
+function setLevel(el, level) {
+  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  currentLevel = el.querySelector('.lchip-lbl').textContent;
+}
+
+// Tab
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+  if (id === 'history') renderHistory();
+}
+
+// Photo
+function handlePhoto(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentPhoto = e.target.result;
+    document.getElementById('preview-img').src = currentPhoto;
+    document.getElementById('photo-preview').style.display = 'block';
+    document.getElementById('photo-label').style.display = 'none';
+    // 사진 업로드 시 자동으로 사진 모드로 전환
+    currentMode = 'photo';
+    document.querySelectorAll('.mchip').forEach(c => c.classList.remove('on'));
+    document.querySelectorAll('.mchip')[1].classList.add('on');
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function removePhoto() {
+  currentPhoto = null;
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-label').style.display = 'flex';
+  document.getElementById('file-input').value = '';
+}
+
+// Panel
+function openPanel(id) {
+  if (id === 'settings-panel') {
+    const key = localStorage.getItem('malpuri_key') || '';
+    document.getElementById('api-key-input').value = key;
+  }
+  document.getElementById(id).classList.add('show');
+}
+function closePanel(id) { document.getElementById(id).classList.remove('show'); }
+
+// API Key
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-ant')) {
+    showApiStatus('err', t.apiErr);
+    return;
+  }
+  localStorage.setItem('malpuri_key', key);
+  showApiStatus('ok', t.apiOk);
+}
+function showApiStatus(type, msg) {
+  const el = document.getElementById('api-status');
+  el.className = 'api-status ' + type;
+  el.textContent = msg;
+  setTimeout(() => el.className = 'api-status', 3000);
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// PII 마스킹
+function maskPII(text) {
+  return text
+    .replace(/\d{6}-\d{7}/g, '######-#######')
+    .replace(/\d{4}-\d{4}-\d{4}-\d{4}/g, '####-####-####-####')
+    .replace(/\d{3}-\d{4}-\d{4}/g, '###-####-####')
+    .replace(/\d{3}-\d{2}-\d{5}/g, '###-##-#####');
+}
+
+// History
+function saveHistory(item) {
+  historyData.unshift(item);
+  if (historyData.length > 50) historyData = historyData.slice(0, 50);
+  localStorage.setItem('malpuri_v2', JSON.stringify(historyData));
+}
+function clearAllData() {
+  if (!confirm(t.deleteConfirm)) return;
+  historyData = [];
+  localStorage.removeItem('malpuri_v2');
+  renderHistory();
+  showToast(t.deleteMsg);
+}
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!historyData.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">${t.emptyTitle}</div><div class="empty-sub">${t.emptySub}</div></div>`;
+    return;
+  }
+  el.innerHTML = historyData.map((item, i) => `
+    <div class="hist-item" onclick="loadHistory(${i})" style="animation-delay:${i*0.04}s">
+      <div class="hist-q">${item.q.substring(0,100)}</div>
+      <div class="hist-a">${item.simple}</div>
+      <div class="hist-meta">
+        <span class="hist-level">${item.level}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="hist-date">${item.date}</span>
+          <span class="hist-del" onclick="event.stopPropagation();deleteHistory(${i})">삭제</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function loadHistory(i) {
+  const item = historyData[i];
+  document.getElementById('input-text').value = item.q;
+  onInput();
+  showResult(item);
+  switchTab('decode', document.querySelectorAll('.tab')[0]);
+}
+function deleteHistory(i) {
+  historyData.splice(i, 1);
+  localStorage.setItem('malpuri_v2', JSON.stringify(historyData));
+  renderHistory();
+}
+
+// Copy
+function copyResult() {
+  const simple = document.getElementById('res-simple')?.textContent || '';
+  navigator.clipboard.writeText(simple).then(() => showToast(t.copiedMsg));
+}
+
+// Quiz 렌더
+function renderQuiz(quizData) {
+  if (!quizData) return '';
+  return `<div class="quiz-area">
+    <div class="quiz-label">${t.quizLabel}</div>
+    <div class="quiz-q">${quizData.question}</div>
+    <div class="quiz-opts">
+      ${quizData.options.map((opt, i) => `<button class="quiz-opt" onclick="answerQuiz(this,${i},${quizData.answer})">${opt}</button>`).join('')}
+    </div>
+    <div class="quiz-result" id="quiz-result"></div>
+  </div>`;
+}
+function answerQuiz(el, idx, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+  const res = document.getElementById('quiz-result');
+  if (idx === correct) {
+    el.classList.add('correct');
+    res.textContent = t.quizCorrect;
+    res.className = 'quiz-result show ok';
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[correct].classList.add('correct');
+    res.textContent = t.quizWrong;
+    res.className = 'quiz-result show no';
+  }
+}
+
+// Show result
+function showResult(data) {
+  const area = document.getElementById('result-area');
+  const kws = (data.keywords || []).map(k => `<span class="kw" onclick="askKeyword('${k}')">${k}</span>`).join('');
+  const quizHtml = data.quiz ? renderQuiz(data.quiz) : '';
+  area.innerHTML = `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-badge"><div class="result-badge-dot"></div>${data.level} 눈높이</div>
+        <div class="result-actions">
+          <div class="act-btn" onclick="copyResult()">${t.copyBtn}</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-simple" id="res-simple">${data.simple}</div>
+        ${data.example ? `<div class="result-example"><div class="ex-label">${t.exampleLabel}</div><div class="ex-text">${data.example}</div></div>` : ''}
+        ${kws ? `<div><div class="slbl" style="margin-bottom:8px">${t.keywordsLabel}</div><div class="keywords">${kws}</div></div>` : ''}
+        ${quizHtml}
+      </div>
+    </div>`;
+}
+
+function askKeyword(kw) {
+  document.getElementById('input-text').value = `"${kw}"이(가) 무슨 뜻인지 쉽게 설명해줘`;
+  onInput();
+  setMode(document.querySelectorAll('.mchip')[0], 'text');
+  showToast('"' + kw + '" ' + t.toastSearch);
+  setTimeout(() => decode(), 300);
+}
+
+// DECODE
+async function decode() {
+  const text = document.getElementById('input-text').value.trim();
+  if (!text && !currentPhoto) { showToast(t.noInput); return; }
+  const apiKey = localStorage.getItem('malpuri_key');
+  if (!apiKey) { showToast(t.noKey); openPanel('settings-panel'); return; }
+
+  const btn = document.getElementById('decode-btn');
+  btn.disabled = true; btn.classList.add('loading');
+  btn.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div> ' + t.loadingBtn;
+
+  // PII 마스킹
+  const safeText = maskPII(text);
+
+  const langNames = {
+    ko:'Korean(한국어)', en:'English', ja:'Japanese(日本語)', zh:'Chinese(中文)',
+    es:'Spanish(Español)', pt:'Brazilian Portuguese(Português do Brasil)',
+    fr:'French(Français)', hi:'Hindi(हिन्दी)', bn:'Bengali(বাংলা)',
+    id:'Indonesian(Bahasa Indonesia)', vi:'Vietnamese(Tiếng Việt)', sw:'Swahili(Kiswahili)'
+  };
+  const outputLang = langNames[currentLang] || 'English';
+  const systemPrompt = `You are an expert who explains difficult economic, legal, financial, social, and practical terms simply.
+CRITICAL RULE: You MUST respond ONLY in ${outputLang}. Every single word in your response must be in ${outputLang}. Do NOT use English or any other language under any circumstances.
+Respond ONLY in JSON format. No other text. No markdown code blocks.
+{
+  "simple": "Easy explanation in ${outputLang} (2-4 sentences, friendly and warm tone, appropriate for a ${currentLevel} student)",
+  "example": "A relatable real-life analogy in ${outputLang} (1-2 sentences)",
+  "keywords": ["keyword1 in ${outputLang}", "keyword2 in ${outputLang}", "keyword3 in ${outputLang}"],
+  "quiz": {
+    "question": "A comprehension quiz question in ${outputLang}",
+    "options": ["option1 in ${outputLang}", "option2 in ${outputLang}", "option3 in ${outputLang}", "option4 in ${outputLang}"],
+    "answer": 0
+  }
+}
+The answer field is the index (0-3) of the correct option. ALL text must be in ${outputLang}.`;
+
+  try {
+    let messages;
+    if (currentPhoto) {
+      const base64 = currentPhoto.split(',')[1];
+      const mediaType = currentPhoto.split(';')[0].split(':')[1];
+      messages = [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+        { type: 'text', text: safeText ? `이 이미지와 함께 "${safeText}"를 ${currentLevel} 눈높이로 설명해주세요` : `이 이미지의 내용을 ${currentLevel} 눈높이로 설명해주세요` }
+      ]}];
+    } else {
+      messages = [{ role: 'user', content: `다음 내용을 ${currentLevel} 눈높이로 설명해주세요:\n\n${safeText}` }];
+    }
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1200, system: systemPrompt, messages })
+    });
+
+    if (!res.ok) { const err = await res.json(); throw new Error(err.error?.message || '오류가 발생했어요'); }
+
+    const data = await res.json();
+    const rawText = data.content[0].text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(rawText);
+
+    const result = {
+      q: safeText || '(이미지 분석)',
+      simple: parsed.simple,
+      example: parsed.example,
+      keywords: parsed.keywords || [],
+      quiz: parsed.quiz || null,
+      level: currentLevel,
+      date: new Date().toLocaleDateString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
+    };
+
+    showResult(result);
+    saveHistory(result);
+
+  } catch(e) {
+    showToast('오류: ' + e.message);
+    document.getElementById('result-area').innerHTML = `<div style="background:rgba(224,80,80,0.08);border:1px solid rgba(224,80,80,0.2);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--rd);line-height:1.6">${e.message}</div>`;
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+    btn.innerHTML = t.mainBtn;
+  }
+}
+</script>
+</body>
+</html>
