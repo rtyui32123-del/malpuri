@@ -1,0 +1,27 @@
+{
+  "name": "말풀이 — PlainTalk",
+  "short_name": "NowIGet",
+  "description": "No hard words in the world / 어려운 말을 쉽게",
+  "start_url": "https://nowiget.app/",
+  "scope": "https://nowiget.app/",
+  "display": "standalone",
+  "background_color": "#fffaf4",
+  "theme_color": "#f07d3a",
+  "orientation": "portrait",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "utilities"]
+}
