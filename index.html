@@ -661,10 +661,6 @@ function applyLang() {
   q('lbl-lvl3').textContent = t.lvl3;
   q('decode-btn').innerHTML = t.mainBtn;
   q('settings-panel-title').textContent = t.settingsTitle;
-  q('lbl-api-section').textContent = t.apiLabel;
-  q('lbl-api-title').textContent = t.apiTitle;
-  q('lbl-api-desc').textContent = t.apiDesc;
-  q('btn-save-api').textContent = t.saveBtn;
   q('lbl-lang').textContent = t.langLabel;
   q('privacy-panel-title').textContent = t.privacyPanelTitle;
   q('btn-delete-all').textContent = t.deleteAllBtn;
@@ -772,10 +768,6 @@ function removePhoto() {
 
 // Panel
 function openPanel(id) {
-  if (id === 'settings-panel') {
-    const key = localStorage.getItem('malpuri_key') || '';
-    document.getElementById('api-key-input').value = key;
-  }
   document.getElementById(id).classList.add('show');
 }
 function closePanel(id) { document.getElementById(id).classList.remove('show'); }
