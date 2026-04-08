@@ -2,7 +2,8 @@
   "name": "말풀이 — PlainTalk",
   "short_name": "말풀이",
   "description": "어려운 말을 쉽게 / Make hard words easy",
-  "start_url": "/index.html",
+  "start_url": "/malpuri/",
+  "scope": "/malpuri/",
   "display": "standalone",
   "background_color": "#fffaf4",
   "theme_color": "#f07d3a",
@@ -22,6 +23,5 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "utilities"],
-  "screenshots": []
+  "categories": ["education", "utilities"]
 }
