@@ -379,8 +379,8 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
     <div class="pcard">
       <div class="pcard-label">PWA</div>
       <div class="pcard-row">
-        <div class="pcard-title">📱 홈 화면에 추가</div>
-        <div class="pcard-desc">Safari → 공유 버튼 → "홈 화면에 추가" 를 선택하면 앱처럼 사용할 수 있어요.</div>
+        <div class="pcard-title" id="lbl-pwa-title">📱 홈 화면에 추가</div>
+        <div class="pcard-desc" id="lbl-pwa-desc">Safari → 공유 버튼 → "홈 화면에 추가" 를 선택하면 앱처럼 사용할 수 있어요.</div>
       </div>
     </div>
   </div>
@@ -415,6 +415,7 @@ const I18N = {
     apiLabel:'API 설정',apiTitle:'Anthropic API 키',apiDesc:'Claude AI 기능을 사용하려면 API 키가 필요해요. console.anthropic.com 에서 발급받을 수 있어요.',
     saveBtn:'저장하기',apiOk:'API 키가 저장됐어요!',apiErr:'올바른 API 키 형식이 아니에요',
     langLabel:'언어 / Language',deleteAllBtn:'모든 기록 삭제',deleteConfirm:'모든 기록을 삭제할까요?',deleteMsg:'기록이 삭제됐어요',levelSuffix:' 눈높이',
+    pwaTitle:'📱 홈 화면에 추가',pwaDesc:'Safari → 공유 버튼 → "홈 화면에 추가" 를 선택하면 앱처럼 사용할 수 있어요. Android Chrome에서는 주소창의 설치 버튼을 눌러주세요.',
   },
   en: {
     appName:'PlainTalk',appSub:'Make hard words easy',tabDecode:'Explain',tabHistory:'History',
@@ -434,6 +435,7 @@ const I18N = {
     apiLabel:'API Settings',apiTitle:'Anthropic API Key',apiDesc:'An API key is required to use Claude AI. Get one at console.anthropic.com.',
     saveBtn:'Save',apiOk:'API key saved!',apiErr:'Invalid API key format',
     langLabel:'Language',deleteAllBtn:'Delete all history',deleteConfirm:'Delete all history?',deleteMsg:'History deleted',levelSuffix:' level',
+    pwaTitle:'📱 Add to Home Screen',pwaDesc:'On Safari: tap Share → "Add to Home Screen". On Android Chrome: tap the install button in the address bar.',
   },
   ja: {
     appName:'やさしく',appSub:'むずかしい言葉をわかりやすく',tabDecode:'解説',tabHistory:'履歴',
@@ -453,6 +455,7 @@ const I18N = {
     apiLabel:'API設定',apiTitle:'Anthropic APIキー',apiDesc:'Claude AIを使用するにはAPIキーが必要です。console.anthropic.comで取得できます。',
     saveBtn:'保存',apiOk:'APIキーを保存しました！',apiErr:'APIキーの形式が正しくありません',
     langLabel:'言語 / Language',deleteAllBtn:'全履歴を削除',deleteConfirm:'全履歴を削除しますか？',deleteMsg:'履歴を削除しました',levelSuffix:'レベル',
+    pwaTitle:'📱 ホーム画面に追加',pwaDesc:'Safariで共有ボタン →「ホーム画面に追加」を選択するとアプリのように使えます。Android Chromeはアドレスバーのインストールボタンをタップしてください。',
   },
   zh: {
     appName:'易懂说',appSub:'让难懂的话变简单',tabDecode:'解释',tabHistory:'历史',
@@ -472,6 +475,7 @@ const I18N = {
     apiLabel:'API设置',apiTitle:'Anthropic API密钥',apiDesc:'使用Claude AI功能需要API密钥。请在console.anthropic.com获取。',
     saveBtn:'保存',apiOk:'API密钥已保存！',apiErr:'API密钥格式不正确',
     langLabel:'语言 / Language',deleteAllBtn:'删除全部历史',deleteConfirm:'确定删除全部历史吗？',deleteMsg:'历史已删除',levelSuffix:'水平',
+    pwaTitle:'📱 添加到主屏幕',pwaDesc:'Safari：点击分享按钮 → "添加到主屏幕"。Android Chrome：点击地址栏的安装按钮。',
   },
   es: {
     appName:'HablaFácil',appSub:'Palabras difíciles, fáciles de entender',tabDecode:'Explicar',tabHistory:'Historial',
@@ -491,6 +495,7 @@ const I18N = {
     apiLabel:'Configuración API',apiTitle:'Clave API de Anthropic',apiDesc:'Se necesita una clave API para usar Claude AI. Consíguela en console.anthropic.com.',
     saveBtn:'Guardar',apiOk:'¡Clave API guardada!',apiErr:'Formato de clave API inválido',
     langLabel:'Idioma / Language',deleteAllBtn:'Borrar todo el historial',deleteConfirm:'¿Borrar todo el historial?',deleteMsg:'Historial borrado',levelSuffix:' nivel',
+    pwaTitle:'📱 Agregar a pantalla de inicio',pwaDesc:'En Safari: toca Compartir → "Agregar a pantalla de inicio". En Android Chrome: toca el botón instalar en la barra de direcciones.',
   },
   pt: {
     appName:'FalaFácil',appSub:'Palavras difíceis, explicadas fácil',tabDecode:'Explicar',tabHistory:'Histórico',
@@ -510,6 +515,7 @@ const I18N = {
     apiLabel:'Config. API',apiTitle:'Chave API Anthropic',apiDesc:'É necessária uma chave API para usar o Claude AI. Obtenha em console.anthropic.com.',
     saveBtn:'Salvar',apiOk:'Chave API salva!',apiErr:'Formato de chave API inválido',
     langLabel:'Idioma / Language',deleteAllBtn:'Apagar todo histórico',deleteConfirm:'Apagar todo o histórico?',deleteMsg:'Histórico apagado',levelSuffix:' nível',
+    pwaTitle:'📱 Adicionar à tela inicial',pwaDesc:'No Safari: toque em Compartilhar → "Adicionar à tela de início". No Android Chrome: toque no botão instalar na barra de endereços.',
   },
   sw: {
     appName:'ElezaRahisi',appSub:'Maneno magumu, yanayoeleweka',tabDecode:'Eleza',tabHistory:'Historia',
@@ -529,6 +535,7 @@ const I18N = {
     apiLabel:'Mipangilio ya API',apiTitle:'Ufunguo wa API wa Anthropic',apiDesc:'Ufunguo wa API unahitajika kutumia Claude AI. Pata kwenye console.anthropic.com.',
     saveBtn:'Hifadhi',apiOk:'Ufunguo wa API umehifadhiwa!',apiErr:'Umbizo la ufunguo wa API si sahihi',
     langLabel:'Lugha / Language',deleteAllBtn:'Futa historia yote',deleteConfirm:'Futa historia yote?',deleteMsg:'Historia imefutwa',levelSuffix:' kiwango',
+    pwaTitle:'📱 Ongeza kwenye skrini ya nyumbani',pwaDesc:'Safari: bonyeza Shiriki → "Ongeza kwenye skrini ya nyumbani". Android Chrome: bonyeza kitufe cha kusakinisha kwenye upau wa anwani.',
   },
   fr: {
     appName:'ParlerSimple',appSub:'Les mots difficiles, expliqués simplement',tabDecode:'Expliquer',tabHistory:'Historique',
@@ -548,6 +555,7 @@ const I18N = {
     apiLabel:'Paramètres API',apiTitle:'Clé API Anthropic',apiDesc:'Une clé API est nécessaire pour utiliser Claude AI. Obtenez-en une sur console.anthropic.com.',
     saveBtn:'Enregistrer',apiOk:'Clé API enregistrée !',apiErr:'Format de clé API invalide',
     langLabel:'Langue / Language',deleteAllBtn:'Supprimer tout l\'historique',deleteConfirm:'Supprimer tout l\'historique ?',deleteMsg:'Historique supprimé',levelSuffix:' niveau',
+    pwaTitle:'📱 Ajouter à l\'écran d\'accueil',pwaDesc:'Sur Safari : appuyez sur Partager → "Sur l\'écran d\'accueil". Sur Android Chrome : appuyez sur le bouton installer dans la barre d\'adresse.',
   },
   hi: {
     appName:'सरलभाषा',appSub:'कठिन शब्द, आसान भाषा में',tabDecode:'समझाएं',tabHistory:'इतिहास',
@@ -567,6 +575,7 @@ const I18N = {
     apiLabel:'API सेटिंग',apiTitle:'Anthropic API कुंजी',apiDesc:'Claude AI का उपयोग करने के लिए API कुंजी आवश्यक है। console.anthropic.com पर प्राप्त करें।',
     saveBtn:'सहेजें',apiOk:'API कुंजी सहेजी गई!',apiErr:'API कुंजी प्रारूप अमान्य',
     langLabel:'भाषा / Language',deleteAllBtn:'सारा इतिहास हटाएं',deleteConfirm:'सारा इतिहास हटाएं?',deleteMsg:'इतिहास हटाया गया',levelSuffix:' स्तर',
+    pwaTitle:'📱 होम स्क्रीन पर जोड़ें',pwaDesc:'Safari पर: शेयर → "होम स्क्रीन में जोड़ें" चुनें। Android Chrome पर: एड्रेस बार में इंस्टॉल बटन दबाएं।',
   },
   bn: {
     appName:'সহজকথা',appSub:'কঠিন কথা সহজে বুঝুন',tabDecode:'বোঝান',tabHistory:'ইতিহাস',
@@ -586,6 +595,7 @@ const I18N = {
     apiLabel:'API সেটিংস',apiTitle:'Anthropic API কী',apiDesc:'Claude AI ব্যবহার করতে API কী প্রয়োজন। console.anthropic.com থেকে পান।',
     saveBtn:'সংরক্ষণ',apiOk:'API কী সংরক্ষিত!',apiErr:'API কী ফরম্যাট ভুল',
     langLabel:'ভাষা / Language',deleteAllBtn:'সব ইতিহাস মুছুন',deleteConfirm:'সব ইতিহাস মুছবেন?',deleteMsg:'ইতিহাস মুছে গেছে',levelSuffix:' স্তর',
+    pwaTitle:'📱 হোম স্ক্রিনে যোগ করুন',pwaDesc:'Safari তে: শেয়ার → "হোম স্ক্রিনে যোগ করুন" চুনুন। Android Chrome এ: ঠিকানা বারের ইনস্টল বোতাম চাপুন।',
   },
   id: {
     appName:'BahasaMudah',appSub:'Kata sulit, dijelaskan mudah',tabDecode:'Jelaskan',tabHistory:'Riwayat',
@@ -605,6 +615,7 @@ const I18N = {
     apiLabel:'Pengaturan API',apiTitle:'Kunci API Anthropic',apiDesc:'Kunci API diperlukan untuk menggunakan Claude AI. Dapatkan di console.anthropic.com.',
     saveBtn:'Simpan',apiOk:'Kunci API disimpan!',apiErr:'Format kunci API tidak valid',
     langLabel:'Bahasa / Language',deleteAllBtn:'Hapus semua riwayat',deleteConfirm:'Hapus semua riwayat?',deleteMsg:'Riwayat dihapus',levelSuffix:' level',
+    pwaTitle:'📱 Tambah ke layar utama',pwaDesc:'Di Safari: ketuk Bagikan → "Tambahkan ke Layar Utama". Di Android Chrome: ketuk tombol instal di bilah alamat.',
   },
   vi: {
     appName:'NóiDễHiểu',appSub:'Từ khó, giải thích dễ hiểu',tabDecode:'Giải thích',tabHistory:'Lịch sử',
@@ -624,6 +635,7 @@ const I18N = {
     apiLabel:'Cài đặt API',apiTitle:'Khóa API Anthropic',apiDesc:'Cần khóa API để sử dụng Claude AI. Lấy tại console.anthropic.com.',
     saveBtn:'Lưu',apiOk:'Đã lưu khóa API!',apiErr:'Định dạng khóa API không hợp lệ',
     langLabel:'Ngôn ngữ / Language',deleteAllBtn:'Xóa tất cả lịch sử',deleteConfirm:'Xóa tất cả lịch sử?',deleteMsg:'Đã xóa lịch sử',levelSuffix:' cấp độ',
+    pwaTitle:'📱 Thêm vào màn hình chính',pwaDesc:'Trên Safari: nhấn Chia sẻ → "Thêm vào màn hình chính". Trên Android Chrome: nhấn nút cài đặt trên thanh địa chỉ.',
   },
 };
 
@@ -664,6 +676,8 @@ function applyLang() {
   q('lbl-lang').textContent = t.langLabel;
   q('privacy-panel-title').textContent = t.privacyPanelTitle;
   q('btn-delete-all').textContent = t.deleteAllBtn;
+  q('lbl-pwa-title').textContent = t.pwaTitle;
+  q('lbl-pwa-desc').textContent = t.pwaDesc;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('on', b.dataset.lang === currentLang));
   currentLevel = t.lvl1;
   document.querySelectorAll('.lchip').forEach((c,i) => { c.querySelector('.lchip-lbl').textContent = [t.lvl1,t.lvl2,t.lvl3][i]; });
