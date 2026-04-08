@@ -377,16 +377,6 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
       </div>
     </div>
     <div class="pcard">
-      <div class="pcard-label" id="lbl-api-section">API 설정</div>
-      <div class="pcard-row">
-        <div class="pcard-title" id="lbl-api-title">Anthropic API 키</div>
-        <div class="pcard-desc" id="lbl-api-desc">Claude AI 기능을 사용하려면 API 키가 필요해요. console.anthropic.com 에서 발급받을 수 있어요.</div>
-        <input class="api-input" type="password" id="api-key-input" placeholder="sk-ant-api03-...">
-        <button class="save-btn" id="btn-save-api" onclick="saveApiKey()">저장하기</button>
-        <div class="api-status" id="api-status"></div>
-      </div>
-    </div>
-    <div class="pcard">
       <div class="pcard-label">PWA</div>
       <div class="pcard-row">
         <div class="pcard-title">📱 홈 화면에 추가</div>
@@ -933,17 +923,16 @@ function askKeyword(kw) {
 }
 
 // DECODE
+const WORKERS_URL = 'https://malpuri-api.rtyui321.workers.dev';
+
 async function decode() {
   const text = document.getElementById('input-text').value.trim();
   if (!text && !currentPhoto) { showToast(t.noInput); return; }
-  const apiKey = localStorage.getItem('malpuri_key');
-  if (!apiKey) { showToast(t.noKey); openPanel('settings-panel'); return; }
 
   const btn = document.getElementById('decode-btn');
   btn.disabled = true; btn.classList.add('loading');
   btn.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div> ' + t.loadingBtn;
 
-  // PII 마스킹
   const safeText = maskPII(text);
 
   const langNames = {
@@ -975,24 +964,19 @@ The answer field is the index (0-3) of the correct option. ALL text must be in $
       const mediaType = currentPhoto.split(';')[0].split(':')[1];
       messages = [{ role: 'user', content: [
         { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-        { type: 'text', text: safeText ? `이 이미지와 함께 "${safeText}"를 ${currentLevel} 눈높이로 설명해주세요` : `이 이미지의 내용을 ${currentLevel} 눈높이로 설명해주세요` }
+        { type: 'text', text: safeText ? `Explain this image and "${safeText}" for a ${currentLevel} student` : `Explain the content of this image for a ${currentLevel} student` }
       ]}];
     } else {
-      messages = [{ role: 'user', content: `다음 내용을 ${currentLevel} 눈높이로 설명해주세요:\n\n${safeText}` }];
+      messages = [{ role: 'user', content: `Explain the following for a ${currentLevel} student:\n\n${safeText}` }];
     }
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(WORKERS_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1200, system: systemPrompt, messages })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: systemPrompt, messages })
     });
 
-    if (!res.ok) { const err = await res.json(); throw new Error(err.error?.message || '오류가 발생했어요'); }
+    if (!res.ok) { const err = await res.json(); throw new Error(err.error?.message || 'Error occurred'); }
 
     const data = await res.json();
     const rawText = data.content[0].text.replace(/```json|```/g, '').trim();
