@@ -213,11 +213,6 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 <!-- STATUS BAR -->
 <div class="status">
   <span class="status-time" id="clock">9:41</span>
-  <div class="status-icons">
-    <svg viewBox="0 0 24 24"><path d="M1 6l5.5 5.5L12 6l5.5 5.5L23 6"/></svg>
-    <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
-    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/></svg>
-  </div>
 </div>
 
 <!-- HEADER -->
@@ -451,7 +446,7 @@ const I18N = {
     onboardExamples:['기준금리 인상','전세사기 예방','주식 용어','의료 동의서'],
     onboardDay:'오늘 하루 보지 않기',onboardWeek:'일주일 보지 않기',onboardClose:'닫기',
     shareLabel:'공유하기',shareCopy:'링크 복사',shareKakao:'카카오',shareTwitter:'트위터',shareMore:'더 보기',
-    loadingMsgs:['AI가 열심히 풀이 중이에요...','쉬운 말로 바꾸고 있어요...','거의 다 됐어요!'],
+    loadingMsgs:['글이 어려운 게 아니에요, 단어가 생소할 뿐이에요 😊','복잡한 말을 쉽게 바꾸는 중이에요...','거의 다 됐어요! 잠깐만요 ✨'],
   },
   en: {
     appName:'PlainTalk',appSub:'Make hard words easy',tabDecode:'Explain',tabHistory:'History',
@@ -477,7 +472,7 @@ const I18N = {
     onboardExamples:['Interest rate hike','Stock market terms','Legal documents','Medical consent'],
     onboardDay:'Hide for today',onboardWeek:'Hide for a week',onboardClose:'Close',
     shareLabel:'Share',shareCopy:'Copy link',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'More',
-    loadingMsgs:['AI is working hard...','Translating to simple words...','Almost done!'],
+    loadingMsgs:["It's not hard writing, just unfamiliar words 😊","Turning complex into simple...","Almost there! Just a moment ✨"],
   },
   ja: {
     appName:'やさしく',appSub:'むずかしい言葉をわかりやすく',tabDecode:'解説',tabHistory:'履歴',
@@ -503,7 +498,7 @@ const I18N = {
     onboardExamples:['金利引き上げ','株式用語','法律文書','医療同意書'],
     onboardDay:'今日は表示しない',onboardWeek:'1週間表示しない',onboardClose:'閉じる',
     shareLabel:'シェア',shareCopy:'リンクをコピー',shareKakao:'カカオ',shareTwitter:'ツイッター',shareMore:'その他',
-    loadingMsgs:['AIが頑張っています...','わかりやすい言葉に変換中...','もうすぐ完成!'],
+    loadingMsgs:['難しい文章じゃないよ、知らない言葉があるだけ 😊','わかりやすく変換中...','もうすぐ完成！少しだけ待って ✨'],
   },
   zh: {
     appName:'易懂说',appSub:'让难懂的话变简单',tabDecode:'解释',tabHistory:'历史',
@@ -529,7 +524,7 @@ const I18N = {
     onboardExamples:['利率上涨','股票术语','法律文件','医疗同意书'],
     onboardDay:'今天不再显示',onboardWeek:'一周不再显示',onboardClose:'关闭',
     shareLabel:'分享',shareCopy:'复制链接',shareKakao:'Kakao',shareTwitter:'推特',shareMore:'更多',
-    loadingMsgs:['AI正在努力解释...','转换为简单语言中...','快完成了!'],
+    loadingMsgs:['文章不难，只是词汇陌生而已 😊','正在转换为简单语言...','快好了！稍等一下 ✨'],
   },
   es: {
     appName:'HablaFácil',appSub:'Palabras difíciles, fáciles de entender',tabDecode:'Explicar',tabHistory:'Historial',
@@ -555,7 +550,7 @@ const I18N = {
     onboardExamples:['Subida de tipos','Términos bursátiles','Documentos legales','Consentimiento médico'],
     onboardDay:'No mostrar hoy',onboardWeek:'No mostrar una semana',onboardClose:'Cerrar',
     shareLabel:'Compartir',shareCopy:'Copiar enlace',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Más',
-    loadingMsgs:['La IA está trabajando...','Convirtiendo a palabras simples...','¡Casi listo!'],
+    loadingMsgs:['No es difícil, solo palabras poco familiares 😊','Convirtiendo a palabras simples...','¡Casi listo! Un momento ✨'],
   },
   pt: {
     appName:'FalaFácil',appSub:'Palavras difíceis, explicadas fácil',tabDecode:'Explicar',tabHistory:'Histórico',
@@ -581,7 +576,7 @@ const I18N = {
     onboardExamples:['Alta de juros','Termos de bolsa','Documentos legais','Termo de consentimento'],
     onboardDay:'Não mostrar hoje',onboardWeek:'Não mostrar por uma semana',onboardClose:'Fechar',
     shareLabel:'Compartilhar',shareCopy:'Copiar link',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Mais',
-    loadingMsgs:['A IA está trabalhando...','Convertendo para palavras simples...','Quase pronto!'],
+    loadingMsgs:['Não é difícil, só palavras desconhecidas 😊','Convertendo para palavras simples...','Quase pronto! Um momento ✨'],
   },
   sw: {
     appName:'ElezaRahisi',appSub:'Maneno magumu, yanayoeleweka',tabDecode:'Eleza',tabHistory:'Historia',
@@ -607,7 +602,7 @@ const I18N = {
     onboardExamples:['Riba kupanda','Maneno ya hisa','Hati za kisheria','Idhini ya matibabu'],
     onboardDay:'Usionyeshe leo',onboardWeek:'Usionyeshe wiki moja',onboardClose:'Funga',
     shareLabel:'Shiriki',shareCopy:'Nakili kiungo',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Zaidi',
-    loadingMsgs:['AI inafanya kazi...','Inabadilisha maneno...','Karibu kumaliza!'],
+    loadingMsgs:['Si ngumu, ni maneno tu yasiyojulikana 😊','Inabadilisha maneno magumu...','Karibu kumaliza! Subiri kidogo ✨'],
   },
   fr: {
     appName:'ParlerSimple',appSub:'Les mots difficiles, expliqués simplement',tabDecode:'Expliquer',tabHistory:'Historique',
@@ -659,7 +654,7 @@ const I18N = {
     onboardExamples:['ब्याज दर वृद्धि','शेयर बाजार','कानूनी दस्तावेज','चिकित्सा सहमति'],
     onboardDay:'आज नहीं दिखाएं',onboardWeek:'एक सप्ताह नहीं दिखाएं',onboardClose:'बंद करें',
     shareLabel:'शेयर करें',shareCopy:'लिंक कॉपी',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'अधिक',
-    loadingMsgs:['AI काम कर रहा है...','सरल शब्दों में बदल रहा है...','लगभग तैयार!'],
+    loadingMsgs:['मुश्किल नहीं, बस अनजाने शब्द हैं 😊','सरल भाषा में बदल रहे हैं...','लगभग तैयार! बस एक पल ✨'],
   },
   bn: {
     appName:'সহজকথা',appSub:'কঠিন কথা সহজে বুঝুন',tabDecode:'বোঝান',tabHistory:'ইতিহাস',
@@ -685,7 +680,7 @@ const I18N = {
     onboardExamples:['সুদের হার বৃদ্ধি','শেয়ার বাজার','আইনি নথি','চিকিৎসা সম্মতি'],
     onboardDay:'আজ দেখাবেন না',onboardWeek:'এক সপ্তাহ দেখাবেন না',onboardClose:'বন্ধ করুন',
     shareLabel:'শেয়ার করুন',shareCopy:'লিংক কপি',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'আরও',
-    loadingMsgs:['AI কাজ করছে...','সহজ ভাষায় রূপান্তর...','প্রায় শেষ!'],
+    loadingMsgs:['কঠিন না, শুধু অপরিচিত শব্দ 😊','সহজ ভাষায় রূপান্তর হচ্ছে...','প্রায় শেষ! একটু অপেক্ষা ✨'],
   },
   id: {
     appName:'BahasaMudah',appSub:'Kata sulit, dijelaskan mudah',tabDecode:'Jelaskan',tabHistory:'Riwayat',
@@ -711,7 +706,7 @@ const I18N = {
     onboardExamples:['Kenaikan suku bunga','Istilah saham','Dokumen hukum','Persetujuan medis'],
     onboardDay:'Jangan tampilkan hari ini',onboardWeek:'Jangan tampilkan seminggu',onboardClose:'Tutup',
     shareLabel:'Bagikan',shareCopy:'Salin tautan',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Lainnya',
-    loadingMsgs:['AI sedang bekerja...','Mengubah ke kata sederhana...','Hampir selesai!'],
+    loadingMsgs:['Bukan sulit, hanya kata-kata asing 😊','Mengubah ke kata sederhana...','Hampir selesai! Sebentar lagi ✨'],
   },
   vi: {
     appName:'NóiDễHiểu',appSub:'Từ khó, giải thích dễ hiểu',tabDecode:'Giải thích',tabHistory:'Lịch sử',
@@ -737,7 +732,7 @@ const I18N = {
     onboardExamples:['Tăng lãi suất','Thuật ngữ chứng khoán','Văn bản pháp lý','Đồng ý y tế'],
     onboardDay:'Không hiển thị hôm nay',onboardWeek:'Không hiển thị một tuần',onboardClose:'Đóng',
     shareLabel:'Chia sẻ',shareCopy:'Sao chép liên kết',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Thêm',
-    loadingMsgs:['AI đang làm việc...','Chuyển đổi sang từ đơn giản...','Gần xong rồi!'],
+    loadingMsgs:['Không khó, chỉ là từ lạ thôi 😊','Đang chuyển sang từ đơn giản...','Gần xong rồi! Chờ một chút ✨'],
   },
 };
 
@@ -789,6 +784,8 @@ function applyLang() {
     document.getElementById('ob-title').textContent = t.onboardTitle || '';
     document.getElementById('ob-desc').textContent = t.onboardDesc || '';
     document.getElementById('ob-day').textContent = t.onboardDay || '';
+    document.getElementById('ob-week').textContent = t.onboardWeek || '';
+    document.getElementById('ob-close').textContent = '✕';
     const exEl = document.getElementById('ob-examples');
     if (exEl && t.onboardExamples) {
       exEl.innerHTML = t.onboardExamples.map(ex =>
