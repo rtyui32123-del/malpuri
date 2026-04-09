@@ -377,16 +377,6 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
       </div>
     </div>
     <div class="pcard">
-      <div class="pcard-label" id="lbl-api-section">API 설정</div>
-      <div class="pcard-row">
-        <div class="pcard-title" id="lbl-api-title">Anthropic API 키</div>
-        <div class="pcard-desc" id="lbl-api-desc">API 키를 입력하면 더 안정적으로 작동해요. console.anthropic.com 에서 발급받을 수 있어요.</div>
-        <input class="api-input" type="password" id="api-key-input" placeholder="sk-ant-api03-...">
-        <button class="save-btn" id="btn-save-api" onclick="saveApiKey()">저장하기</button>
-        <div class="api-status" id="api-status"></div>
-      </div>
-    </div>
-    <div class="pcard">
       <div class="pcard-label">PWA</div>
       <div class="pcard-row">
         <div class="pcard-title" id="lbl-pwa-title">📱 홈 화면에 추가</div>
@@ -684,10 +674,6 @@ function applyLang() {
   q('decode-btn').innerHTML = t.mainBtn;
   q('settings-panel-title').textContent = t.settingsTitle;
   q('lbl-lang').textContent = t.langLabel;
-  q('lbl-api-section').textContent = t.apiLabel;
-  q('lbl-api-title').textContent = t.apiTitle;
-  q('lbl-api-desc').textContent = t.apiDesc;
-  q('btn-save-api').textContent = t.saveBtn;
   q('privacy-panel-title').textContent = t.privacyPanelTitle;
   q('btn-delete-all').textContent = t.deleteAllBtn;
   q('lbl-pwa-title').textContent = t.pwaTitle;
@@ -796,29 +782,9 @@ function removePhoto() {
 
 // Panel
 function openPanel(id) {
-  if (id === 'settings-panel') {
-    const key = localStorage.getItem('malpuri_key') || '';
-    document.getElementById('api-key-input').value = key;
-  }
   document.getElementById(id).classList.add('show');
 }
 function closePanel(id) { document.getElementById(id).classList.remove('show'); }
-
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key.startsWith('sk-ant')) {
-    showApiStatus('err', t.apiErr);
-    return;
-  }
-  localStorage.setItem('malpuri_key', key);
-  showApiStatus('ok', t.apiOk);
-}
-function showApiStatus(type, msg) {
-  const el = document.getElementById('api-status');
-  el.className = 'api-status ' + type;
-  el.textContent = msg;
-  setTimeout(() => el.className = 'api-status', 3000);
-}
 
 // Toast
 function showToast(msg) {
