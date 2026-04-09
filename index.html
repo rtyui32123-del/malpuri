@@ -182,6 +182,24 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .lang-btn{padding:7px 14px;background:white;border:1.5px solid var(--border2);border-radius:20px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
 .lang-btn.on{background:var(--accentl);border-color:var(--accent);color:var(--accent)}
 .lang-btn:hover{border-color:var(--accent2)}
+
+/* ONBOARDING */
+.onboard{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);border-radius:18px;padding:18px 16px;color:white;position:relative;overflow:hidden;animation:slideup .3s ease}
+.onboard::before{content:'💬';position:absolute;right:-8px;bottom:-12px;font-size:70px;opacity:0.15;line-height:1}
+.onboard-title{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.4}
+.onboard-desc{font-size:12px;opacity:0.9;line-height:1.6;margin-bottom:12px}
+.onboard-examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.onboard-ex{padding:6px 12px;background:rgba(255,255,255,0.22);border:1px solid rgba(255,255,255,0.35);border-radius:16px;font-size:11px;font-weight:500;color:white;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
+.onboard-ex:hover{background:rgba(255,255,255,0.35)}
+.onboard-dismiss{display:flex;gap:6px;border-top:1px solid rgba(255,255,255,0.2);padding-top:10px}
+.onboard-skip{flex:1;padding:7px;background:transparent;border:1px solid rgba(255,255,255,0.3);border-radius:10px;font-size:11px;color:rgba(255,255,255,0.9);cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-align:center;font-weight:500}
+.onboard-skip:hover{background:rgba(255,255,255,0.15)}
+
+/* SHARE */
+.share-row{display:flex;gap:8px;flex-wrap:wrap}
+.share-btn{flex:1;min-width:70px;padding:8px 6px;background:white;border:1.5px solid var(--border2);border-radius:12px;font-size:11px;font-weight:500;color:var(--tx2);cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-align:center;transition:all .15s}
+.share-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accentl)}
+.share-btn .share-icon{font-size:16px;display:block;margin-bottom:3px}
 .toast{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:12px;padding:10px 22px;font-size:13px;color:white;white-space:nowrap;transition:transform .25s ease;z-index:200;pointer-events:none;font-weight:500}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
@@ -234,6 +252,18 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 
   <!-- DECODE TAB -->
   <div class="view on" id="tab-decode">
+
+    <!-- 온보딩 배너 -->
+    <div class="onboard" id="onboard-banner">
+      <div class="onboard-title" id="ob-title">어려운 말, 쉽게 풀어드려요 💡</div>
+      <div class="onboard-desc" id="ob-desc">계약서, 뉴스, 금융 용어... 복잡한 내용을 초등학생도 이해할 수 있게 설명해드려요.</div>
+      <div class="onboard-examples" id="ob-examples"></div>
+      <div class="onboard-dismiss">
+        <button class="onboard-skip" id="ob-day" onclick="dismissOnboard('day')">오늘 하루 보지 않기</button>
+        <button class="onboard-skip" id="ob-week" onclick="dismissOnboard('week')">일주일 보지 않기</button>
+        <button class="onboard-skip" id="ob-close" onclick="dismissOnboard('close')">✕</button>
+      </div>
+    </div>
 
     <!-- 개인정보 안내 -->
     <div class="privacy-notice">
@@ -416,6 +446,12 @@ const I18N = {
     saveBtn:'저장하기',apiOk:'API 키가 저장됐어요!',apiErr:'올바른 API 키 형식이 아니에요',
     langLabel:'언어 / Language',deleteAllBtn:'모든 기록 삭제',deleteConfirm:'모든 기록을 삭제할까요?',deleteMsg:'기록이 삭제됐어요',levelSuffix:' 눈높이',
     pwaTitle:'📱 홈 화면에 추가',pwaDesc:'Safari → 공유 버튼 → "홈 화면에 추가" 를 선택하면 앱처럼 사용할 수 있어요. Android Chrome에서는 주소창의 설치 버튼을 눌러주세요.',
+    onboardTitle:'어려운 말, 쉽게 풀어드려요 💡',
+    onboardDesc:'계약서, 뉴스, 금융 용어... 복잡한 내용을 초등학생도 이해할 수 있게 설명해드려요.',
+    onboardExamples:['기준금리 인상','전세사기 예방','주식 용어','의료 동의서'],
+    onboardDay:'오늘 하루 보지 않기',onboardWeek:'일주일 보지 않기',onboardClose:'닫기',
+    shareLabel:'공유하기',shareCopy:'링크 복사',shareKakao:'카카오',shareTwitter:'트위터',shareMore:'더 보기',
+    loadingMsgs:['AI가 열심히 풀이 중이에요...','쉬운 말로 바꾸고 있어요...','거의 다 됐어요!'],
   },
   en: {
     appName:'PlainTalk',appSub:'Make hard words easy',tabDecode:'Explain',tabHistory:'History',
@@ -436,6 +472,12 @@ const I18N = {
     saveBtn:'Save',apiOk:'API key saved!',apiErr:'Invalid API key format',
     langLabel:'Language',deleteAllBtn:'Delete all history',deleteConfirm:'Delete all history?',deleteMsg:'History deleted',levelSuffix:' level',
     pwaTitle:'📱 Add to Home Screen',pwaDesc:'On Safari: tap Share → "Add to Home Screen". On Android Chrome: tap the install button in the address bar.',
+    onboardTitle:'Hard words, made simple 💡',
+    onboardDesc:'Contracts, news, financial terms... we explain complex content so anyone can understand.',
+    onboardExamples:['Interest rate hike','Stock market terms','Legal documents','Medical consent'],
+    onboardDay:'Hide for today',onboardWeek:'Hide for a week',onboardClose:'Close',
+    shareLabel:'Share',shareCopy:'Copy link',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'More',
+    loadingMsgs:['AI is working hard...','Translating to simple words...','Almost done!'],
   },
   ja: {
     appName:'やさしく',appSub:'むずかしい言葉をわかりやすく',tabDecode:'解説',tabHistory:'履歴',
@@ -456,6 +498,12 @@ const I18N = {
     saveBtn:'保存',apiOk:'APIキーを保存しました！',apiErr:'APIキーの形式が正しくありません',
     langLabel:'言語 / Language',deleteAllBtn:'全履歴を削除',deleteConfirm:'全履歴を削除しますか？',deleteMsg:'履歴を削除しました',levelSuffix:'レベル',
     pwaTitle:'📱 ホーム画面に追加',pwaDesc:'Safariで共有ボタン →「ホーム画面に追加」を選択するとアプリのように使えます。Android Chromeはアドレスバーのインストールボタンをタップしてください。',
+    onboardTitle:'難しい言葉、わかりやすく 💡',
+    onboardDesc:'契約書、ニュース、金融用語...複雑な内容を小学生でも理解できるよう説明します。',
+    onboardExamples:['金利引き上げ','株式用語','法律文書','医療同意書'],
+    onboardDay:'今日は表示しない',onboardWeek:'1週間表示しない',onboardClose:'閉じる',
+    shareLabel:'シェア',shareCopy:'リンクをコピー',shareKakao:'カカオ',shareTwitter:'ツイッター',shareMore:'その他',
+    loadingMsgs:['AIが頑張っています...','わかりやすい言葉に変換中...','もうすぐ完成!'],
   },
   zh: {
     appName:'易懂说',appSub:'让难懂的话变简单',tabDecode:'解释',tabHistory:'历史',
@@ -476,6 +524,12 @@ const I18N = {
     saveBtn:'保存',apiOk:'API密钥已保存！',apiErr:'API密钥格式不正确',
     langLabel:'语言 / Language',deleteAllBtn:'删除全部历史',deleteConfirm:'确定删除全部历史吗？',deleteMsg:'历史已删除',levelSuffix:'水平',
     pwaTitle:'📱 添加到主屏幕',pwaDesc:'Safari：点击分享按钮 → "添加到主屏幕"。Android Chrome：点击地址栏的安装按钮。',
+    onboardTitle:'难懂的话，轻松理解 💡',
+    onboardDesc:'合同、新闻、金融术语...我们将复杂内容解释得连小学生都能理解。',
+    onboardExamples:['利率上涨','股票术语','法律文件','医疗同意书'],
+    onboardDay:'今天不再显示',onboardWeek:'一周不再显示',onboardClose:'关闭',
+    shareLabel:'分享',shareCopy:'复制链接',shareKakao:'Kakao',shareTwitter:'推特',shareMore:'更多',
+    loadingMsgs:['AI正在努力解释...','转换为简单语言中...','快完成了!'],
   },
   es: {
     appName:'HablaFácil',appSub:'Palabras difíciles, fáciles de entender',tabDecode:'Explicar',tabHistory:'Historial',
@@ -496,6 +550,12 @@ const I18N = {
     saveBtn:'Guardar',apiOk:'¡Clave API guardada!',apiErr:'Formato de clave API inválido',
     langLabel:'Idioma / Language',deleteAllBtn:'Borrar todo el historial',deleteConfirm:'¿Borrar todo el historial?',deleteMsg:'Historial borrado',levelSuffix:' nivel',
     pwaTitle:'📱 Agregar a pantalla de inicio',pwaDesc:'En Safari: toca Compartir → "Agregar a pantalla de inicio". En Android Chrome: toca el botón instalar en la barra de direcciones.',
+    onboardTitle:'Palabras difíciles, explicadas fácil 💡',
+    onboardDesc:'Contratos, noticias, términos financieros... explicamos contenido complejo para que todos entiendan.',
+    onboardExamples:['Subida de tipos','Términos bursátiles','Documentos legales','Consentimiento médico'],
+    onboardDay:'No mostrar hoy',onboardWeek:'No mostrar una semana',onboardClose:'Cerrar',
+    shareLabel:'Compartir',shareCopy:'Copiar enlace',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Más',
+    loadingMsgs:['La IA está trabajando...','Convirtiendo a palabras simples...','¡Casi listo!'],
   },
   pt: {
     appName:'FalaFácil',appSub:'Palavras difíceis, explicadas fácil',tabDecode:'Explicar',tabHistory:'Histórico',
@@ -516,6 +576,12 @@ const I18N = {
     saveBtn:'Salvar',apiOk:'Chave API salva!',apiErr:'Formato de chave API inválido',
     langLabel:'Idioma / Language',deleteAllBtn:'Apagar todo histórico',deleteConfirm:'Apagar todo o histórico?',deleteMsg:'Histórico apagado',levelSuffix:' nível',
     pwaTitle:'📱 Adicionar à tela inicial',pwaDesc:'No Safari: toque em Compartilhar → "Adicionar à tela de início". No Android Chrome: toque no botão instalar na barra de endereços.',
+    onboardTitle:'Palavras difíceis, explicadas fácil 💡',
+    onboardDesc:'Contratos, notícias, termos financeiros... explicamos conteúdo complexo para todos entenderem.',
+    onboardExamples:['Alta de juros','Termos de bolsa','Documentos legais','Termo de consentimento'],
+    onboardDay:'Não mostrar hoje',onboardWeek:'Não mostrar por uma semana',onboardClose:'Fechar',
+    shareLabel:'Compartilhar',shareCopy:'Copiar link',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Mais',
+    loadingMsgs:['A IA está trabalhando...','Convertendo para palavras simples...','Quase pronto!'],
   },
   sw: {
     appName:'ElezaRahisi',appSub:'Maneno magumu, yanayoeleweka',tabDecode:'Eleza',tabHistory:'Historia',
@@ -536,6 +602,12 @@ const I18N = {
     saveBtn:'Hifadhi',apiOk:'Ufunguo wa API umehifadhiwa!',apiErr:'Umbizo la ufunguo wa API si sahihi',
     langLabel:'Lugha / Language',deleteAllBtn:'Futa historia yote',deleteConfirm:'Futa historia yote?',deleteMsg:'Historia imefutwa',levelSuffix:' kiwango',
     pwaTitle:'📱 Ongeza kwenye skrini ya nyumbani',pwaDesc:'Safari: bonyeza Shiriki → "Ongeza kwenye skrini ya nyumbani". Android Chrome: bonyeza kitufe cha kusakinisha kwenye upau wa anwani.',
+    onboardTitle:'Maneno magumu, yanayoeleweka 💡',
+    onboardDesc:'Mikataba, habari, maneno ya fedha... tunaelezea maudhui magumu ili kila mtu aelewe.',
+    onboardExamples:['Riba kupanda','Maneno ya hisa','Hati za kisheria','Idhini ya matibabu'],
+    onboardDay:'Usionyeshe leo',onboardWeek:'Usionyeshe wiki moja',onboardClose:'Funga',
+    shareLabel:'Shiriki',shareCopy:'Nakili kiungo',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Zaidi',
+    loadingMsgs:['AI inafanya kazi...','Inabadilisha maneno...','Karibu kumaliza!'],
   },
   fr: {
     appName:'ParlerSimple',appSub:'Les mots difficiles, expliqués simplement',tabDecode:'Expliquer',tabHistory:'Historique',
@@ -556,6 +628,12 @@ const I18N = {
     saveBtn:'Enregistrer',apiOk:'Clé API enregistrée !',apiErr:'Format de clé API invalide',
     langLabel:'Langue / Language',deleteAllBtn:'Supprimer tout l\'historique',deleteConfirm:'Supprimer tout l\'historique ?',deleteMsg:'Historique supprimé',levelSuffix:' niveau',
     pwaTitle:'📱 Ajouter à l\'écran d\'accueil',pwaDesc:'Sur Safari : appuyez sur Partager → "Sur l\'écran d\'accueil". Sur Android Chrome : appuyez sur le bouton installer dans la barre d\'adresse.',
+    onboardTitle:'Mots difficiles, expliqués simplement 💡',
+    onboardDesc:'Contrats, actualités, termes financiers... nous expliquons le contenu complexe pour que tous comprennent.',
+    onboardExamples:['Hausse des taux','Termes boursiers','Documents légaux','Consentement médical'],
+    onboardDay:'Ne pas afficher aujourd\'hui',onboardWeek:'Ne pas afficher une semaine',onboardClose:'Fermer',
+    shareLabel:'Partager',shareCopy:'Copier le lien',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Plus',
+    loadingMsgs:['L\'IA travaille dur...','Conversion en mots simples...','Presque terminé!'],
   },
   hi: {
     appName:'सरलभाषा',appSub:'कठिन शब्द, आसान भाषा में',tabDecode:'समझाएं',tabHistory:'इतिहास',
@@ -576,6 +654,12 @@ const I18N = {
     saveBtn:'सहेजें',apiOk:'API कुंजी सहेजी गई!',apiErr:'API कुंजी प्रारूप अमान्य',
     langLabel:'भाषा / Language',deleteAllBtn:'सारा इतिहास हटाएं',deleteConfirm:'सारा इतिहास हटाएं?',deleteMsg:'इतिहास हटाया गया',levelSuffix:' स्तर',
     pwaTitle:'📱 होम स्क्रीन पर जोड़ें',pwaDesc:'Safari पर: शेयर → "होम स्क्रीन में जोड़ें" चुनें। Android Chrome पर: एड्रेस बार में इंस्टॉल बटन दबाएं।',
+    onboardTitle:'कठिन शब्द, आसान भाषा में 💡',
+    onboardDesc:'अनुबंध, समाचार, वित्तीय शब्द... हम जटिल सामग्री को सरल भाषा में समझाते हैं।',
+    onboardExamples:['ब्याज दर वृद्धि','शेयर बाजार','कानूनी दस्तावेज','चिकित्सा सहमति'],
+    onboardDay:'आज नहीं दिखाएं',onboardWeek:'एक सप्ताह नहीं दिखाएं',onboardClose:'बंद करें',
+    shareLabel:'शेयर करें',shareCopy:'लिंक कॉपी',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'अधिक',
+    loadingMsgs:['AI काम कर रहा है...','सरल शब्दों में बदल रहा है...','लगभग तैयार!'],
   },
   bn: {
     appName:'সহজকথা',appSub:'কঠিন কথা সহজে বুঝুন',tabDecode:'বোঝান',tabHistory:'ইতিহাস',
@@ -596,6 +680,12 @@ const I18N = {
     saveBtn:'সংরক্ষণ',apiOk:'API কী সংরক্ষিত!',apiErr:'API কী ফরম্যাট ভুল',
     langLabel:'ভাষা / Language',deleteAllBtn:'সব ইতিহাস মুছুন',deleteConfirm:'সব ইতিহাস মুছবেন?',deleteMsg:'ইতিহাস মুছে গেছে',levelSuffix:' স্তর',
     pwaTitle:'📱 হোম স্ক্রিনে যোগ করুন',pwaDesc:'Safari তে: শেয়ার → "হোম স্ক্রিনে যোগ করুন" চুনুন। Android Chrome এ: ঠিকানা বারের ইনস্টল বোতাম চাপুন।',
+    onboardTitle:'কঠিন কথা, সহজে বুঝুন 💡',
+    onboardDesc:'চুক্তি, সংবাদ, আর্থিক শব্দ... জটিল বিষয়বস্তু সহজ ভাষায় ব্যাখ্যা করি।',
+    onboardExamples:['সুদের হার বৃদ্ধি','শেয়ার বাজার','আইনি নথি','চিকিৎসা সম্মতি'],
+    onboardDay:'আজ দেখাবেন না',onboardWeek:'এক সপ্তাহ দেখাবেন না',onboardClose:'বন্ধ করুন',
+    shareLabel:'শেয়ার করুন',shareCopy:'লিংক কপি',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'আরও',
+    loadingMsgs:['AI কাজ করছে...','সহজ ভাষায় রূপান্তর...','প্রায় শেষ!'],
   },
   id: {
     appName:'BahasaMudah',appSub:'Kata sulit, dijelaskan mudah',tabDecode:'Jelaskan',tabHistory:'Riwayat',
@@ -616,6 +706,12 @@ const I18N = {
     saveBtn:'Simpan',apiOk:'Kunci API disimpan!',apiErr:'Format kunci API tidak valid',
     langLabel:'Bahasa / Language',deleteAllBtn:'Hapus semua riwayat',deleteConfirm:'Hapus semua riwayat?',deleteMsg:'Riwayat dihapus',levelSuffix:' level',
     pwaTitle:'📱 Tambah ke layar utama',pwaDesc:'Di Safari: ketuk Bagikan → "Tambahkan ke Layar Utama". Di Android Chrome: ketuk tombol instal di bilah alamat.',
+    onboardTitle:'Kata sulit, dijelaskan mudah 💡',
+    onboardDesc:'Kontrak, berita, istilah keuangan... kami jelaskan konten kompleks agar semua orang mengerti.',
+    onboardExamples:['Kenaikan suku bunga','Istilah saham','Dokumen hukum','Persetujuan medis'],
+    onboardDay:'Jangan tampilkan hari ini',onboardWeek:'Jangan tampilkan seminggu',onboardClose:'Tutup',
+    shareLabel:'Bagikan',shareCopy:'Salin tautan',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Lainnya',
+    loadingMsgs:['AI sedang bekerja...','Mengubah ke kata sederhana...','Hampir selesai!'],
   },
   vi: {
     appName:'NóiDễHiểu',appSub:'Từ khó, giải thích dễ hiểu',tabDecode:'Giải thích',tabHistory:'Lịch sử',
@@ -636,6 +732,12 @@ const I18N = {
     saveBtn:'Lưu',apiOk:'Đã lưu khóa API!',apiErr:'Định dạng khóa API không hợp lệ',
     langLabel:'Ngôn ngữ / Language',deleteAllBtn:'Xóa tất cả lịch sử',deleteConfirm:'Xóa tất cả lịch sử?',deleteMsg:'Đã xóa lịch sử',levelSuffix:' cấp độ',
     pwaTitle:'📱 Thêm vào màn hình chính',pwaDesc:'Trên Safari: nhấn Chia sẻ → "Thêm vào màn hình chính". Trên Android Chrome: nhấn nút cài đặt trên thanh địa chỉ.',
+    onboardTitle:'Từ khó, giải thích dễ hiểu 💡',
+    onboardDesc:'Hợp đồng, tin tức, thuật ngữ tài chính... chúng tôi giải thích nội dung phức tạp để mọi người hiểu.',
+    onboardExamples:['Tăng lãi suất','Thuật ngữ chứng khoán','Văn bản pháp lý','Đồng ý y tế'],
+    onboardDay:'Không hiển thị hôm nay',onboardWeek:'Không hiển thị một tuần',onboardClose:'Đóng',
+    shareLabel:'Chia sẻ',shareCopy:'Sao chép liên kết',shareKakao:'Kakao',shareTwitter:'Twitter',shareMore:'Thêm',
+    loadingMsgs:['AI đang làm việc...','Chuyển đổi sang từ đơn giản...','Gần xong rồi!'],
   },
 };
 
@@ -681,6 +783,19 @@ function applyLang() {
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('on', b.dataset.lang === currentLang));
   currentLevel = t.lvl1;
   document.querySelectorAll('.lchip').forEach((c,i) => { c.querySelector('.lchip-lbl').textContent = [t.lvl1,t.lvl2,t.lvl3][i]; });
+  // 온보딩 텍스트 업데이트
+  const ob = document.getElementById('onboard-banner');
+  if (ob && ob.style.display !== 'none') {
+    document.getElementById('ob-title').textContent = t.onboardTitle || '';
+    document.getElementById('ob-desc').textContent = t.onboardDesc || '';
+    document.getElementById('ob-day').textContent = t.onboardDay || '';
+    const exEl = document.getElementById('ob-examples');
+    if (exEl && t.onboardExamples) {
+      exEl.innerHTML = t.onboardExamples.map(ex =>
+        `<button class="onboard-ex" onclick="tryExample('${ex}')">${ex}</button>`
+      ).join('');
+    }
+  }
 }
 
 function setLang(lang) {
@@ -697,6 +812,7 @@ function updateClock() {
 }
 updateClock(); setInterval(updateClock, 10000);
 applyLang();
+initOnboard();
 
 // Service Worker 등록 (PWA)
 if ('serviceWorker' in navigator) {
@@ -886,12 +1002,14 @@ function showResult(data) {
   const area = document.getElementById('result-area');
   const kws = (data.keywords || []).map(k => `<span class="kw" onclick="askKeyword('${k}')">${k}</span>`).join('');
   const quizHtml = data.quiz ? renderQuiz(data.quiz) : '';
+  const levelLabel = data.level + (t.levelSuffix || '');
   area.innerHTML = `
     <div class="result-card">
       <div class="result-header">
-        <div class="result-badge"><div class="result-badge-dot"></div>${data.level} 눈높이</div>
+        <div class="result-badge"><div class="result-badge-dot"></div>${levelLabel}</div>
         <div class="result-actions">
           <div class="act-btn" onclick="copyResult()">${t.copyBtn}</div>
+          <div class="act-btn" onclick="shareResult()">${t.shareLabel}</div>
         </div>
       </div>
       <div class="result-body">
@@ -911,6 +1029,57 @@ function askKeyword(kw) {
   setTimeout(() => decode(), 300);
 }
 
+// 공유 기능
+function shareResult() {
+  const simple = document.getElementById('res-simple')?.textContent || '';
+  const shareText = simple + '\n\n— ' + (window.location.href);
+  if (navigator.share) {
+    navigator.share({ title: t.appName, text: simple, url: window.location.href })
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareText).then(() => showToast(t.shareCopy + ' ✓'));
+  }
+}
+
+// 온보딩 배너
+function initOnboard() {
+  const dismissed = localStorage.getItem('malpuri_onboard');
+  if (dismissed) {
+    const until = parseInt(dismissed);
+    if (Date.now() < until) {
+      document.getElementById('onboard-banner').style.display = 'none';
+      return;
+    }
+  }
+  // 예시 버튼 렌더
+  const exEl = document.getElementById('ob-examples');
+  if (exEl && t.onboardExamples) {
+    exEl.innerHTML = t.onboardExamples.map(ex =>
+      `<button class="onboard-ex" onclick="tryExample('${ex}')">${ex}</button>`
+    ).join('');
+  }
+  document.getElementById('ob-title').textContent = t.onboardTitle || '';
+  document.getElementById('ob-desc').textContent = t.onboardDesc || '';
+  document.getElementById('ob-day').textContent = t.onboardDay || '';
+  document.getElementById('ob-week').textContent = t.onboardWeek || '';
+  document.getElementById('ob-close').textContent = '✕';
+}
+
+function dismissOnboard(type) {
+  const banner = document.getElementById('onboard-banner');
+  if (type === 'day') localStorage.setItem('malpuri_onboard', Date.now() + 86400000);
+  else if (type === 'week') localStorage.setItem('malpuri_onboard', Date.now() + 604800000);
+  else localStorage.setItem('malpuri_onboard', Date.now() + 86400000);
+  banner.style.display = 'none';
+}
+
+function tryExample(ex) {
+  document.getElementById('input-text').value = ex;
+  onInput();
+  dismissOnboard('close');
+  setTimeout(() => decode(), 200);
+}
+
 // DECODE
 const WORKERS_URL = 'https://malpuri-api.rtyui321.workers.dev';
 
@@ -924,7 +1093,8 @@ async function decode() {
 
   const btn = document.getElementById('decode-btn');
   btn.disabled = true; btn.classList.add('loading');
-  btn.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div> ' + t.loadingBtn;
+  const loadingMsg = t.loadingMsgs ? t.loadingMsgs[Math.floor(Math.random() * t.loadingMsgs.length)] : t.loadingBtn;
+  btn.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div> ' + loadingMsg;
 
   const safeText = maskPII(text);
 
