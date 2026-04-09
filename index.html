@@ -1078,13 +1078,11 @@ function tryExample(ex) {
 }
 
 // DECODE
-const ANTHROPIC_KEY = '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';
+const API_URL = '/api/chat';
 
 async function decode() {
   const text = document.getElementById('input-text').value.trim();
   if (!text && !currentPhoto) { showToast(t.noInput); return; }
-
-  const apiKey = localStorage.getItem('malpuri_key') || ANTHROPIC_KEY;
 
   const btn = document.getElementById('decode-btn');
   btn.disabled = true; btn.classList.add('loading');
@@ -1129,20 +1127,10 @@ The answer field is the index (0-3) of the correct option. ALL text must be in $
     }
 
     let res;
-    res = await fetch('https://api.anthropic.com/v1/messages', {
+    res = await fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1200,
-        system: systemPrompt,
-        messages
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: systemPrompt, messages })
     });
 
     if (!res.ok) { const err = await res.json(); throw new Error(err.error?.message || 'Error occurred'); }
