@@ -377,6 +377,16 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
       </div>
     </div>
     <div class="pcard">
+      <div class="pcard-label" id="lbl-api-section">API 설정</div>
+      <div class="pcard-row">
+        <div class="pcard-title" id="lbl-api-title">Anthropic API 키</div>
+        <div class="pcard-desc" id="lbl-api-desc">API 키를 입력하면 더 안정적으로 작동해요. console.anthropic.com 에서 발급받을 수 있어요.</div>
+        <input class="api-input" type="password" id="api-key-input" placeholder="sk-ant-api03-...">
+        <button class="save-btn" id="btn-save-api" onclick="saveApiKey()">저장하기</button>
+        <div class="api-status" id="api-status"></div>
+      </div>
+    </div>
+    <div class="pcard">
       <div class="pcard-label">PWA</div>
       <div class="pcard-row">
         <div class="pcard-title" id="lbl-pwa-title">📱 홈 화면에 추가</div>
@@ -674,6 +684,10 @@ function applyLang() {
   q('decode-btn').innerHTML = t.mainBtn;
   q('settings-panel-title').textContent = t.settingsTitle;
   q('lbl-lang').textContent = t.langLabel;
+  q('lbl-api-section').textContent = t.apiLabel;
+  q('lbl-api-title').textContent = t.apiTitle;
+  q('lbl-api-desc').textContent = t.apiDesc;
+  q('btn-save-api').textContent = t.saveBtn;
   q('privacy-panel-title').textContent = t.privacyPanelTitle;
   q('btn-delete-all').textContent = t.deleteAllBtn;
   q('lbl-pwa-title').textContent = t.pwaTitle;
@@ -782,11 +796,14 @@ function removePhoto() {
 
 // Panel
 function openPanel(id) {
+  if (id === 'settings-panel') {
+    const key = localStorage.getItem('malpuri_key') || '';
+    document.getElementById('api-key-input').value = key;
+  }
   document.getElementById(id).classList.add('show');
 }
 function closePanel(id) { document.getElementById(id).classList.remove('show'); }
 
-// API Key
 function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim();
   if (!key.startsWith('sk-ant')) {
@@ -935,6 +952,10 @@ async function decode() {
   const text = document.getElementById('input-text').value.trim();
   if (!text && !currentPhoto) { showToast(t.noInput); return; }
 
+  // API 키 확인 (설정에서 입력한 키 or Workers 사용)
+  const apiKey = localStorage.getItem('malpuri_key');
+  const useWorkers = !apiKey;
+
   const btn = document.getElementById('decode-btn');
   btn.disabled = true; btn.classList.add('loading');
   btn.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div> ' + t.loadingBtn;
@@ -976,11 +997,32 @@ The answer field is the index (0-3) of the correct option. ALL text must be in $
       messages = [{ role: 'user', content: `Explain the following for a ${currentLevel} student:\n\n${safeText}` }];
     }
 
-    const res = await fetch(WORKERS_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: systemPrompt, messages })
-    });
+    let res;
+    if (useWorkers) {
+      // Workers 방식 (API 키 불필요)
+      res = await fetch(WORKERS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: systemPrompt, messages })
+      });
+    } else {
+      // 직접 API 키 방식
+      res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1200,
+          system: systemPrompt,
+          messages
+        })
+      });
+    }
 
     if (!res.ok) { const err = await res.json(); throw new Error(err.error?.message || 'Error occurred'); }
 
